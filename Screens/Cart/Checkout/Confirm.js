@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  Button,
   TouchableOpacity,
   Linking,
 } from "react-native";
@@ -26,17 +25,16 @@ const Confirm = (props) => {
   const dispatch = useDispatch();
   let navigation = useNavigation();
 
-
   const confirmRequest = () => {
     AsyncStorage.getItem("jwt")
       .then((res) => {
         const token = res || "";
-  
+
         const request = finalRequest.request.request.request;
         request.paymentInfo = finalRequest.paymentInfo;
-  
+
         const formData = new FormData();
-  
+
         formData.append("user", request.user);
         formData.append("email", request.email);
         formData.append("requestItems", JSON.stringify(request.requestItems));
@@ -46,27 +44,28 @@ const Confirm = (props) => {
         formData.append("requestStatus", request.requestStatus);
         formData.append("paymentInfo", finalRequest.request.paymentInfo);
         formData.append("totalPrice", request.totalPrice);
-  
+
         // Check if authorization letter exists
         if (finalRequest.authorizationLetter) {
           const newImageUri =
-            "file:///" + finalRequest.authorizationLetter.split("file:/").join("");
+            "file:///" +
+            finalRequest.authorizationLetter.split("file:/").join("");
           formData.append("authorizationImage", {
             uri: newImageUri,
             type: mime.getType(newImageUri),
             name: newImageUri.split("/").pop(),
           });
         }
-  
+
         console.log("Request Details: ", formData);
-  
+
         const config = {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         };
-  
+
         axios
           .post(`${baseURL}requests`, formData, config)
           .then((res) => {
@@ -75,15 +74,17 @@ const Confirm = (props) => {
                 topOffset: 60,
                 type: "success",
                 text1: "Your Request is Complete",
-                text2: "We'll process your request as soon as possible. Thank you for choosing our service.",
+                text2:
+                  "We'll process your request as soon as possible. Thank you for choosing our service.",
               });
 
               console.log("response", res);
-  
+
               const { checkoutUrl } = res.data;
-              console.log("paymongo link", checkoutUrl);
+
               if (finalRequest.paymentInfo === "Gcash") {
                 Linking.openURL(checkoutUrl);
+              
               } else {
                 setTimeout(() => {
                   dispatch(actions.clearCart());
@@ -147,10 +148,14 @@ const Confirm = (props) => {
                       />
                     </View>
                     <VStack>
-                      <Text className="text-sm font-normal text-center">{item.name}</Text>
+                      <Text className="text-sm font-normal text-center">
+                        {item.name}
+                      </Text>
                     </VStack>
                     <Spacer />
-                    <Text className="text-base font-normal text-center">{item.price}</Text>
+                    <Text className="text-base font-normal text-center">
+                      {item.price}
+                    </Text>
                   </HStack>
                 </View>
               );

@@ -44,7 +44,7 @@ const Notification = (props) => {
       .then((res) => {
         // Filter requests to get only pending requests
         const pendingRequests = res.data.filter(
-          (request) => request.requestStatus === "pending"
+          (request) => request.requestStatus === "Pending"
         );
   
         setRequests(pendingRequests);

@@ -94,7 +94,7 @@ const Payment = (props) => {
         dateOrdered: Date.now(),
         paidAt: Date.now(),
         orderItems,
-        orderStatus: "pending",
+        orderStatus: "Pending",
         user,
         totalPrice: total,
       };
