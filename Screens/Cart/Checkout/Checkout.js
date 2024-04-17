@@ -47,7 +47,7 @@ const Checkout = (props) => {
   const [email, setEmail] = useState("");
 
   const navigation = useNavigation();
-  const cartItems = useSelector((state) => state.cartItems);
+  const documentItems = useSelector((state) => state.documentItems);
   const context = useContext(AuthGlobal);
 
   const validateForm = () => {
@@ -59,11 +59,11 @@ const Checkout = (props) => {
 
   useEffect(() => {
     let total = 0;
-    cartItems.forEach((item) => {
+    documentItems.forEach((item) => {
       total += item.price * item.quantity;
     });
     setTotalPrice(total);
-    setRequestItems(cartItems);
+    setRequestItems(documentItems);
 
     if (context.stateUser.isAuthenticated) {
       setUser(context.stateUser.user.userId);
@@ -81,7 +81,7 @@ const Checkout = (props) => {
     return () => {
       setRequestItems([]);
     };
-  }, [cartItems, context.stateUser.isAuthenticated, navigation]);
+  }, [documentItems, context.stateUser.isAuthenticated, navigation]);
 
   const checkOut = () => {
     if (!validateForm()) {

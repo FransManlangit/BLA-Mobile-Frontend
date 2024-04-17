@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, TouchableOpacity, Image, Alert, TextInput } from "react-native";
-import { Text, Radio, Box, CheckIcon } from "native-base";
+import { View, TouchableOpacity, Image, Alert } from "react-native";
+import { Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import AuthGlobal from "../../../Context/Store/AuthGlobal";
@@ -143,16 +143,6 @@ const Payment = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
-        {/* <View className="mt-16 items-center">
-          <TouchableOpacity
-            onPress={() => handlePayment(selected)}
-            className="py-3 bg-[#FAE500] rounded-xl w-56"
-          >
-            <Text className="text-base font-semibold text-center text-black">
-              Confirm
-            </Text>
-          </TouchableOpacity>
-        </View> */}
       </View>
     </KeyboardAwareScrollView>
   );

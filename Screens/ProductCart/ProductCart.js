@@ -77,8 +77,10 @@ const ProductCart = (props) => {
             }
           />
           <View className="ml-3">
-            <Text className=" text-xl font-bold">{item.name}</Text>
-            <Text className="font-normal">$ {item.price}</Text>
+            <Text className="tracking-wider text-sm font-semibold subpixel-antialiased">
+              {item.productName}
+            </Text>
+            <Text className="font-normal">₱{item.price}</Text>
           </View>
         </HStack>
       </Box>
@@ -102,25 +104,9 @@ const ProductCart = (props) => {
 
   return (
     <View>
-      <View
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: COLOURS.white,
-          position: "relative",
-        }}
-      >
+      <View className="bg-white h-full w-full">
         <ScrollView>
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              paddingTop: 16,
-              paddingHorizontal: 16,
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <View className="w-full flex-row pt-4 pl-4  justify-between items-center">
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <ChevronLeftIcon
                 name="chevron-left"
@@ -133,27 +119,14 @@ const ProductCart = (props) => {
                 }}
               />
             </TouchableOpacity>
-            <Text
-              style={{
-                fontSize: 14,
-                color: COLOURS.black,
-                fontWeight: "400",
-              }}
-            >
+            <Text className="text-base text-black font-normal">
               Order Details
             </Text>
             <View></View>
           </View>
           <Text
-            style={{
-              fontSize: 20,
-              color: COLOURS.black,
-              fontWeight: "500",
-              letterSpacing: 1,
-              paddingTop: 20,
-              paddingLeft: 16,
-              marginBottom: 10,
-            }}
+            className="text-xl text-black font-medium tracking-widest pt-4 pl-4 mb-2.5"
+            Text
           >
             My Orders
           </Text>
@@ -164,7 +137,7 @@ const ProductCart = (props) => {
               style={{ fontSize: 22, color: COLOURS.black }}
             />
           </View>
-          <View style={{ paddingHorizontal: 16 }}>
+          <View className="px-5">
             {productItems.length > 0 ? (
               <Box bg="white" safeArea flex="1" width="100%">
                 <SwipeListView
@@ -179,77 +152,24 @@ const ProductCart = (props) => {
                 />
               </Box>
             ) : (
-              <Box style={styles.emptyContainer}>
+              <Box className="items-center justify-center h-80">
                 <Text>No items in cart</Text>
               </Box>
             )}
           </View>
           <View>
-            <View
-              style={{
-                paddingHorizontal: 16,
-                marginVertical: 10,
-              }}
-            ></View>
-            <View
-              style={{
-                paddingHorizontal: 16,
-                marginTop: 40,
-                marginBottom: 80,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: COLOURS.black,
-                  fontWeight: "500",
-                  letterSpacing: 1,
-                  marginBottom: 20,
-                }}
-              >
+            <View className="px-8 my-8"></View>
+            <View className="px-8 mt-10 mb-20">
+              <Text className="text-base text-black font-medium tracking-widest mb-5">
                 Order Info
               </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: 8,
-                }}
-              ></View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: 22,
-                }}
-              ></View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: "400",
-                    maxWidth: "80%",
-                    color: COLOURS.black,
-                    opacity: 0.5,
-                  }}
-                >
+              <View className="flex-row items-center justify-between mb-2"></View>
+              <View className="flex-row items-center justify-between mb-6"></View>
+              <View className="flex-row items-center justify-between">
+                <Text className="text-sm font-normal max-w-6 text-black opacity-50">
                   Total
                 </Text>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "500",
-                    color: COLOURS.black,
-                  }}
-                >
+                <Text className="text-lg font-medium text-black">
                   ₱ {total.toFixed(2)}
                 </Text>
               </View>
@@ -257,16 +177,7 @@ const ProductCart = (props) => {
           </View>
         </ScrollView>
 
-        <View
-          style={{
-            position: "absolute",
-            bottom: 10,
-            height: "8%",
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <View className="absolute bottom-2.5 h-12 w-full items-center justify-center">
           <TouchableOpacity
             onPress={() => order()}
             style={{

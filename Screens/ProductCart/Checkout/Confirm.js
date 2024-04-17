@@ -29,9 +29,8 @@ const Confirm = (props) => {
       return text;
     }
     const truncatedText = text.substr(0, maxLength);
-    // Find the last space within the truncated text
     const lastSpaceIndex = truncatedText.lastIndexOf(" ");
-    // Remove everything after the last space
+ 
     return truncatedText.substr(0, lastSpaceIndex) + "...";
   };
 
@@ -41,6 +40,7 @@ const Confirm = (props) => {
     order.paymentInfo = payment;
 
     console.log("final order", finalOrder);
+    console.log("Payment Info", payment);
 
     AsyncStorage.getItem("jwt")
       .then((res) => {
@@ -64,19 +64,21 @@ const Confirm = (props) => {
                   "We'll process your order as soon as possible. Thank you for your purchase.",
               });
 
+              console.log("response", res);
               const { checkoutUrl } = res.data;
 
-              if (finalOrder.paymentInfo === "Gcash") {
+              if (payment !== "Cash") {
                 Linking.openURL(checkoutUrl);
-              } else {
-                setTimeout(() => {
-                  dispatch(actions.clearCart());
-                  navigation.navigate("ProductCart");
-                }, 500);
               }
+
+              setTimeout(() => {
+                dispatch(actions.clearCart());
+                navigation.navigate("ProductCart");
+              }, 500);
             }
           })
           .catch((error) => {
+            console.error("Error confirming request:", error);
             Toast.show({
               topOffset: 60,
               type: "error",

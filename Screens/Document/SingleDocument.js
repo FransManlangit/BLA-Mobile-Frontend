@@ -10,13 +10,11 @@ import {
   Button,
 } from "native-base";
 import Toast from "react-native-toast-message";
-import * as actions from "../../Redux/Actions/cartActions";
+import * as actions from "../../Redux/Actions/documentActions";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
-import { useSelector, useDispatch } from "react-redux";
-import EasyButton from "../../Shared/StyledComponents/EasyButtons";
+import { useDispatch } from "react-redux";
 import TrafficLight from "../../Shared/StyledComponents/TrafficLight";
 import { COLORS, SIZES } from "../../assets/constants";
-import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SingleDocument = ({ route, navigation }) => {
@@ -77,7 +75,7 @@ const SingleDocument = ({ route, navigation }) => {
         <TouchableOpacity
           onPress={() => {
             // Pass the entire item to addToCart
-            dispatch(actions.addToCart({ ...item, quantity: 1 }));
+            dispatch(actions.addToCartDocument({ ...item, quantity: 1 }));
             Toast.show({
               topOffset: 60,
               type: "success",

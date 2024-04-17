@@ -11,7 +11,7 @@ import {
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../Redux/Actions/cartActions";
+import * as actions from "../../Redux/Actions/documentActions";
 import { COLORS, SIZES } from "../../assets/constants";
 import { PlusCircleIcon } from "react-native-heroicons/outline";
 
@@ -46,7 +46,7 @@ const DocumentCard = (props) => {
           <Text className="text-s font-semibold p-2">₱{price}</Text>
           <PlusCircleIcon
             onPress={() => {
-              dispatch(actions.addToCart({ ...props, quantity: 1 })),
+              dispatch(actions.addToCartDocument({ ...props, quantity: 1 })),
                 Toast.show({
                   topOffset: 60,
                   type: "success",

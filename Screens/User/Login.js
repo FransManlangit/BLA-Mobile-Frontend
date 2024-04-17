@@ -9,9 +9,7 @@ import {
 import React, { useState, useContext, useEffect } from "react";
 import AuthGlobal from "../../Context/Store/AuthGlobal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Error from "../../Shared/Error";
 import { loginUser } from "../../Context/Actions/Auth.actions";
-import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";

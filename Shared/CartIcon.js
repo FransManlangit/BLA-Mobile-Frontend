@@ -10,11 +10,11 @@
 
     const color = props.color
 
-    const cartItems = useSelector(state => state.cartItems);
+    const documentItems = useSelector(state => state.documentItems);
 
     return (
       <>
-        {cartItems.length > 0 ? (
+        {documentItems.length > 0 ? (
           <VStack space={2} alignItems="center">
             <View className="p-5">
           <Badge 
@@ -31,7 +31,7 @@
             color: COLORS.white
           }}
           >
-          {cartItems.length}
+          {documentItems.length}
           </Badge>
           <DocumentPlusIcon color={color}/>
           </View>

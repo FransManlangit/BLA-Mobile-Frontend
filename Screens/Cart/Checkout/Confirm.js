@@ -8,7 +8,7 @@ import {
   Linking,
 } from "react-native";
 import { Text, HStack, VStack, Avatar, Spacer, Center } from "native-base";
-import * as actions from "../../../Redux/Actions/cartActions";
+import * as actions from "../../../Redux/Actions/documentActions";
 import Toast from "react-native-toast-message";
 import axios from "axios";
 import baseURL from "../../../assets/common/baseUrl";
@@ -79,18 +79,17 @@ const Confirm = (props) => {
               });
 
               console.log("response", res);
-
               const { checkoutUrl } = res.data;
 
-              if (finalRequest.paymentInfo === "Gcash") {
+              // Handle payment logic
+              if (finalRequest.paymentInfo !== "Cash") {
                 Linking.openURL(checkoutUrl);
-              
-              } else {
-                setTimeout(() => {
-                  dispatch(actions.clearCart());
-                  navigation.navigate("Cart");
-                }, 500);
               }
+              
+              setTimeout(() => {
+                dispatch(actions.clearCartDocument());
+                navigation.navigate("Cart");
+              }, 500);
             }
           })
           .catch((error) => {

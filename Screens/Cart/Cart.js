@@ -1,74 +1,49 @@
-import React, { useEffect, useState, useContext } from "react";
-
+import React, { useContext } from "react";
 import {
   View,
   Dimensions,
-  FlatList,
   StyleSheet,
   TouchableOpacity,
   TouchableHighlight,
-  Pressable,
-  ScrollView,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { clearCart, removeFromCart } from "../../Redux/Actions/cartActions";
 import {
-  Container,
+  clearCartDocument,
+  removeFromCartDocument,
+} from "../../Redux/Actions/documentActions";
+import {
   Text,
   Box,
   HStack,
-  Avatar,
-  VStack,
-  Spacer,
-  Divider,
-  Center,
-  Button,
-  Heading,
+  VStack, 
   Image,
-  Toast
+  Toast,
 } from "native-base";
-
 import { SwipeListView } from "react-native-swipe-list-view";
-
-import EasyButton from "../../Shared/StyledComponents/EasyButtons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Header from "../../Shared/Header";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import AuthGlobal from "../../Context/Store/AuthGlobal";
-import {COLOURS, Item} from "../../assets/database/Database";
+import { COLOURS, Item } from "../../assets/database/Database";
 import {
-ChevronLeftIcon,
-TruckIcon,
-ChevronRightIcon,
-TrashIcon,
- 
+  ChevronLeftIcon,
+  TrashIcon,
 } from "react-native-heroicons/outline";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 var { height, width } = Dimensions.get("window");
 
 const Cart = (props) => {
   var total = 0;
   const navigation = useNavigation();
-  const cartItems = useSelector((state) => state.cartItems);
+  const documentItems = useSelector((state) => state.documentItems);
   const dispatch = useDispatch();
   const context = useContext(AuthGlobal);
-  const { image } = props;
-
-  // const calculateTotal = () => {
-  //   let total = 0;
-  //   cartItems.forEach((cart) => {
-  //     total += cart.price * cart.quantity;
-  //   });
-  //   return total.toFixed(2);
-  // };
+  
   const request = () => {
     if (context.stateUser.isAuthenticated) {
-      if (cartItems.length > 0) {
+      if (documentItems.length > 0) {
         navigation.navigate("Checkout");
       } else {
-      
         Toast.show({
           topOffset: 60,
           type: "warning",
@@ -87,12 +62,11 @@ const Cart = (props) => {
     }
   };
 
-
-  cartItems.forEach((cart) => {
+  documentItems.forEach((cart) => {
     return (total += cart.price);
   });
 
-  console.log("cart items list", cartItems)
+  console.log("cart items list", documentItems);
   const renderItem = ({ item, index }) => (
     <TouchableHighlight
       onPress={() => console.log("You touched me")}
@@ -116,15 +90,20 @@ const Cart = (props) => {
             }
           />
           <View className="ml-3">
-            <Text className="tracking-wider text-lg font-semibold subpixel-antialiased">{item.name}</Text>
+            <Text className="tracking-wider text-sm font-semibold subpixel-antialiased">
+              {item.name}
+            </Text>
+            <Text className="font-normal">₱{item.price}</Text>
           </View>
         </HStack>
       </Box>
     </TouchableHighlight>
   );
 
-  const renderHiddenItem = (cartItems) => (
-    <TouchableOpacity onPress={() => dispatch(removeFromCart(cartItems.item))}>
+  const renderHiddenItem = (documentItems) => (
+    <TouchableOpacity
+      onPress={() => dispatch(removeFromCartDocument(documentItems.item))}
+    >
       <VStack alignItems="center" style={styles.hiddenButton}>
         <View>
           <Icon name="trash" color={"white"} size={30} bg="red" />
@@ -138,177 +117,95 @@ const Cart = (props) => {
 
   return (
     <View>
-    <View className="bg-white h-full w-full">
-    <ScrollView>
-      <View
-        style={{
-          width: '100%',
-          flexDirection: 'row',
-          paddingTop: 16,
-          paddingHorizontal: 16,
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <ChevronLeftIcon
-            name="chevron-left"
-            style={{
-              fontSize: 18,
-              color: COLOURS.backgroundDark,
-              padding: 12,
-              backgroundColor: COLOURS.backgroundLight,
-              borderRadius: 12,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontSize: 14,
-            color: COLOURS.black,
-            fontWeight: '400',
-          }}>
-          Request Details
-        </Text>
-        <View></View>
-      </View>
-      <Text
-        style={{
-          fontSize: 20,
-          color: COLOURS.black,
-          fontWeight: '500',
-          letterSpacing: 1,
-          paddingTop: 20,
-          paddingLeft: 16,
-          marginBottom: 10,
-        }}>
-        My Request
-      </Text>
-      <Text className="text-right pr-8 text-s font-semibold">Delete</Text>
-     <View className="flex pr-10 items-end">
-      <TrashIcon
-      onPress={() => dispatch(clearCart())}
-      style={{fontSize: 22, color: COLOURS.black}}
-      />
-      </View>
-      <View style={{paddingHorizontal: 16}}>
-      {cartItems.length > 0 ? (
-        <Box bg="white" safeArea flex="1" width="100%">
-          <SwipeListView
-            data={cartItems}
-            renderItem={renderItem}
-            renderHiddenItem={renderHiddenItem}
-            disableRightSwipe={true}
-            leftOpenValue={75}
-            rightOpenValue={-150}
-            previewOpenValue={-100}
-            previewOpenDelay={3000}
-          />
-        </Box>
-      ) : (
-        <Box style={styles.emptyContainer}>
-          <Text>No items in cart</Text>
-        </Box>
-      )}
-       
-      </View>
-      <View>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            marginVertical: 10,
-          }}>
-          
-        </View>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            marginTop: 40,
-            marginBottom: 80,
-          }}>
-          <Text
-            style={{
-              fontSize: 16,
-              color: COLOURS.black,
-              fontWeight: '500',
-              letterSpacing: 1,
-              marginBottom: 20,
-            }}>
-            Request Info
+      <View className="bg-white h-full w-full">
+        <KeyboardAwareScrollView>
+          <View className="w-full flex-row pt-4 pl-4  justify-between items-center">
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <ChevronLeftIcon
+                name="chevron-left"
+                style={{
+                  fontSize: 18,
+                  color: COLOURS.backgroundDark,
+                  padding: 12,
+                  backgroundColor: COLOURS.backgroundLight,
+                  borderRadius: 12,
+                }}
+              />
+            </TouchableOpacity>
+            <Text className="text-base text-black font-normal">
+              Request Details
+            </Text>
+            <View></View>
+          </View>
+          <Text className="text-xl text-black font-medium tracking-widest pt-4 pl-4 mb-2.5">
+            My Request
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 8,
-            }}>     
+          <Text className="text-right pr-8 text-s font-semibold">Delete</Text>
+          <View className="flex pr-10 items-end">
+            <TrashIcon
+              onPress={() => dispatch(clearCartDocument())}
+              style={{ fontSize: 22, color: COLOURS.black }}
+            />
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 22,
-            }}>
-           
-           
+          <View className="px-5">
+            {documentItems.length > 0 ? (
+              <Box bg="white" safeArea flex="1" width="100%">
+                <SwipeListView
+                  data={documentItems}
+                  renderItem={renderItem}
+                  renderHiddenItem={renderHiddenItem}
+                  disableRightSwipe={true}
+                  leftOpenValue={75}
+                  rightOpenValue={-150}
+                  previewOpenValue={-100}
+                  previewOpenDelay={3000}
+                />
+              </Box>
+            ) : (
+              <Box className="items-center justify-center h-80">
+                <Text>No items in cart</Text>
+              </Box>
+            )}
           </View>
-          <View
+          <View>
+            <View className="px-8 my-8"></View>
+            <View className="px-8 mt-10 mb-20">
+              <Text className="text-base text-black font-medium tracking-widest mb-5">
+                Request Info
+              </Text>
+              <View className="flex-row items-center justify-between mb-2"></View>
+              <View className="flex-row items-center justify-between mb-6"></View>
+              <View className="flex-row items-center justify-between">
+                <Text className="text-sm font-normal max-w-6 text-black opacity-50">
+                  Total
+                </Text>
+                <Text className="text-lg font-medium text-black">
+                  ₱ {total.toFixed(2)}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </KeyboardAwareScrollView>
+
+        <View className="absolute bottom-2.5 h-12 w-full items-center justify-center">
+          <TouchableOpacity
+            onPress={() => request()}
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text
-              style={{
-                fontSize: 12,
-                fontWeight: '400',
-                maxWidth: '80%',
-                color: COLOURS.black,
-                opacity: 0.5,
-              }}>
-              Total
+              width: "86%",
+              height: "90%",
+              backgroundColor: COLOURS.yellow,
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text className="font-medium text-black tracking-wide">
+              REQUEST {total.toFixed(2)}
             </Text>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '500',
-                color: COLOURS.black,
-              }}>
-            ₱ {total.toFixed(2)}
-            </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
-
-    <View
-      style={{
-        position: 'absolute',
-        bottom: 10,
-        height: '8%',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <TouchableOpacity
-        onPress={() => request()}
-        style={{
-          width: '86%',
-          height: '90%',
-          backgroundColor: COLOURS.yellow,
-          borderRadius: 20,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text className="font-medium text-black tracking-wide">
-       
-          REQUEST {total.toFixed(2)}
-        </Text>
-      </TouchableOpacity>
     </View>
-  </View>
-  </View>
   );
 };
 
