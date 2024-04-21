@@ -82,7 +82,7 @@ const Confirm = (props) => {
               const { checkoutUrl } = res.data;
 
               // Handle payment logic
-              if (finalRequest.paymentInfo !== "Cash") {
+              if (finalRequest.paymentInfo === "Gcash") {
                 Linking.openURL(checkoutUrl);
               }
               

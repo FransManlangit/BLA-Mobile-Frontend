@@ -6,7 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-
 import {
   Container,
   VStack,
@@ -21,19 +20,19 @@ import {
   ScrollView,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 
 var { width } = Dimensions.get("window");
 
-const SearchProduct = (props) => {
+const SearchedProduct = (props) => {
   const { productsFiltered } = props;
   const navigation = useNavigation();
 
   const handleItemPress = (item) => {
-    navigation.navigate("Product Detail", { item }); // 'ProductDetail' is the name of the details screen
+    navigation.navigate("Product Detail", { item }); 
   };
   return (
-    <SafeAreaView>
+   
     <ScrollView>
       <View className="pt-4">
     <Container style={{ width: width }}>
@@ -109,7 +108,7 @@ const SearchProduct = (props) => {
     </Container>
     </View>
     </ScrollView>
-    </SafeAreaView>
+  
   );
 };
 
@@ -129,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchProduct;
+export default SearchedProduct;

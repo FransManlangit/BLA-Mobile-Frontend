@@ -20,10 +20,18 @@ const Login = (props) => {
   const context = useContext(AuthGlobal);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const navigation = useNavigation();
+
+  const validateForm = () => {
+    let errors = {};
+    if (!email) errors.email = "Email is Required";
+    if (!password) errors.password = "Password is Required";
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleForgotPass = () => {
     navigation.navigate("ForgotPassword");
@@ -34,13 +42,16 @@ const Login = (props) => {
   };
 
   const login = () => {
+    if (!validateForm()) {
+      return;
+    }
     const user = {
       email,
       password,
     };
 
     if (email === "" || password === "") {
-      setError("Please fill in your credentials");
+      setErrors("Please fill in your credentials");
     } else {
       loginUser(user, context.dispatch);
       console.log("error");
@@ -51,9 +62,6 @@ const Login = (props) => {
     if (context.stateUser.isAuthenticated === true) {
       // Navigate based on user role after successful login
       switch (context.stateUser.user.role) {
-        case "admin":
-          navigation.navigate("AdminProfile");
-          break;
         case "guidance":
           navigation.navigate("GuidanceNavigator");
           break;
@@ -102,23 +110,37 @@ const Login = (props) => {
           >
             <View className="space-y-4">
               <View className="flex ">
-                <Text className="text-base pb-4 font-semibold">Email Address</Text>
-                <TextInput className="rounded-full bg-neutral-100 h-14 pl-4"
+                <Text className="text-base pb-4 font-semibold">
+                  Email Address
+                </Text>
+                <TextInput
+                  placeholder="Enter your Email"
+                  className="rounded-full bg-neutral-100 h-14 pl-4"
                   value={email}
                   onChangeText={(text) => setEmail(text)}
-                
-                 
                 />
+                {errors.email ? (
+                  <Text className="text-red-400 pl-2 pt-2">{errors.email}</Text>
+                ) : null}
               </View>
               <View className="space-y-4">
                 <Text className="text-base font-semibold">Password</Text>
-                <View style={styles.passwordInputContainer}>
-                <TextInput className="rounded-full bg-neutral-100 h-14 pl-4"
+                <View className="flex-row items-center">
+                  <View>
+                  <TextInput
+                    placeholder="Enter your password"
+                    className="rounded-full bg-neutral-100 h-14 w-72 pl-4"
                     value={password}
                     onChangeText={(text) => setPassword(text)}
                     secureTextEntry={!showPassword}
                     style={[styles.passwordInput]}
                   />
+                  {errors.password ? (
+                    <Text className="text-red-400 pl-2 pt-2">
+                      {errors.password}
+                    </Text>
+                  ) : null}
+                  </View>
                   <TouchableOpacity
                     style={styles.passwordVisibilityToggle}
                     onPress={handleTogglePasswordVisibility}
@@ -165,8 +187,6 @@ const Login = (props) => {
 };
 
 const styles = StyleSheet.create({
- 
-
   inputContainer: {
     marginBottom: 20,
   },
@@ -190,7 +210,6 @@ const styles = StyleSheet.create({
   passwordVisibilityToggle: {
     padding: 10,
   },
-  
 });
 
 export default Login;

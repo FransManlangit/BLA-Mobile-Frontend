@@ -21,6 +21,7 @@ import AdminProfile from "../Screens/Admin/AdminProfile";
 import CashierNavigator from "./CashierNavigator";
 import UploadClearance from "../Screens/User/UploadClearance";
 import Authorization from "../Screens/Admin/Authorization";
+import ChangePassword from "../Screens/User/ChangePassword";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import baseURL from "../assets/common/baseUrl";
@@ -69,166 +70,180 @@ const UserNavigator = (props) => {
         tabBarShowLabel: false,
       }}
     >
-      <Stack.Screen
-        name="User Profile"
-        component={UserProfile}
-        options={{
-          headerShown: false,
-        }}
-      />
+      {stateUser.isAuthenticated ? (
+        <>
+          <Stack.Screen
+            name="User Profile"
+            component={UserProfile}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="ChangePassword"
+            component={ChangePassword}
+            options={{
+              headerShown: false,
+            }}
+            initialParams={{ userProfile: userProfile }} // Pass userProfile as initialParams
+          />
 
-      <Stack.Screen
-        name="Register"
-        component={Register}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="Order Details"
+            component={OrderDetails}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-      <Stack.Screen
-        name="Start"
-        component={Start}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="StudentOrder"
+            component={StudentOrder}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-      <Stack.Screen
-        name="Order Details"
-        component={OrderDetails}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="StudentRequest"
+            component={StudentRequest}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-      <Stack.Screen
-        name="StudentOrder"
-        component={StudentOrder}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="RequestDetails"
+            component={RequestDetails}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-      <Stack.Screen
-        name="StudentRequest"
-        component={StudentRequest}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="Authorization"
+            component={Authorization}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-      <Stack.Screen
-        name="RequestDetails"
-        component={RequestDetails}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="DateSchedule"
+            component={DateSchedule}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-      <Stack.Screen
-        name="Authorization"
-        component={Authorization}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="UploadClearance"
+            component={UploadClearance}
+            options={{
+              headerShown: false,
+            }}
+          />
 
-      <Stack.Screen
-        name="DateSchedule"
-        component={DateSchedule}
-        options={{
-          headerShown: false,
-        }}
-      />
+          {Guidance && (
+            <Stack.Screen
+              name="GuidanceNavigator"
+              component={GuidanceNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+          )}
 
-      <Stack.Screen
-        name="UploadClearance"
-        component={UploadClearance}
-        options={{
-          headerShown: false,
-        }}
-      />
+          <Stack.Screen
+            name="Starts"
+            component={Starts}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {Admin && (
+            <Stack.Screen
+              name="AdminProfile"
+              component={AdminProfile}
+              options={{
+                headerShown: false,
+              }}
+            />
+          )}
 
-      {Guidance && (
-        <Stack.Screen
-          name="GuidanceNavigator"
-          component={GuidanceNavigator}
-          options={{
-            headerShown: false,
-          }}
-        />
+          <Stack.Screen
+            name="Starter"
+            component={Starter}
+            options={{
+              headerShown: false,
+            }}
+          />
+          {Cashier && (
+            <Stack.Screen
+              name="CashierNavigator"
+              component={CashierNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+          )}
+
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPassword}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ResetPass"
+            component={ResetPasswordConfirmation}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="UserUpdate"
+            component={UserUpdate}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DateDetail"
+            component={DateDetail}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Start"
+            component={Start}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </>
       )}
-
-      <Stack.Screen
-        name="Starts"
-        component={Starts}
-        options={{
-          headerShown: false,
-        }}
-      />
-      {Admin && (
-        <Stack.Screen
-          name="AdminProfile"
-          component={AdminProfile}
-          options={{
-            headerShown: false,
-          }}
-        />
-      )}
-
-      <Stack.Screen
-        name="Starter"
-        component={Starter}
-        options={{
-          headerShown: false,
-        }}
-      />
-      {Cashier && (
-        <Stack.Screen
-          name="CashierNavigator"
-          component={CashierNavigator}
-          options={{
-            headerShown: false,
-          }}
-        />
-      )}
-
-      <Stack.Screen
-        name="ForgotPassword"
-        component={ForgotPassword}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="ResetPass"
-        component={ResetPasswordConfirmation}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="UserUpdate"
-        component={UserUpdate}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="DateDetail"
-        component={DateDetail}
-        options={{
-          headerShown: false,
-        }}
-      />
     </Stack.Navigator>
   );
 };

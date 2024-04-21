@@ -15,13 +15,8 @@ import baseURL from "../../assets/common/baseUrl";
 import AuthGlobal from "../../Context/Store/AuthGlobal";
 import { logoutUser } from "../../Context/Actions/Auth.actions";
 import { COLORS, SIZES } from "../../assets/constants";
-import { useSelector, useDispatch } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import Header from "../../Shared/Header";
+import { useDispatch } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   PencilSquareIcon,
@@ -29,7 +24,7 @@ import {
   ClipboardDocumentIcon,
   UserGroupIcon,
   CreditCardIcon,
-  CircleStackIcon,
+  LockClosedIcon,
 } from "react-native-heroicons/solid";
 
 const UserProfile = () => {
@@ -54,6 +49,10 @@ const UserProfile = () => {
 
   const handleEditPress = () => {
     navigation.navigate("UserUpdate", { userProfile });
+  };
+
+  const changepassword = (request) => {
+    navigation.navigate("ChangePassword", { request });
   };
 
 
@@ -149,13 +148,18 @@ const UserProfile = () => {
                 </View>
               ) : null}
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => handleEditPress()}>
               <View className="pl-4 flex flex-row space-x-1 items-center">
                 <PencilSquareIcon size={45} color={COLORS.versatilegray} />
                 <Text className="font-semibold pl-4 ">Edit Profile</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => changepassword()}>
+                <View className="pl-4 flex flex-row space-x-1 items-center">
+                  <LockClosedIcon size={45} color={COLORS.versatilegray} />
+                  <Text className="font-semibold pl-4 ">Change Password</Text>
+                </View>
+              </TouchableOpacity>
             <TouchableOpacity
               onPress={() => [
                 navigation.navigate("Login"),

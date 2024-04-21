@@ -13,12 +13,18 @@ import UserUpdateStatus from "../Screens/Admin/UserUpdateStatus";
 import Notification from "../Screens/Admin/Notification";
 import CreateStudent from "../Screens/Admin/CreateStudent";
 import EditProfile from "../Screens/Admin/EditProfile";
+import AdminProfile from "../Screens/Admin/AdminProfile";
 
 const Stack = createStackNavigator();
 
 function MyStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+    initialRouteName="AdminProfile"
+    screenOptions={{
+      headerShown: false,
+    }}
+    >
       <Stack.Screen
         name="Documents"
         component={Documents}
@@ -56,22 +62,7 @@ function MyStack() {
           title: "User Update Status",
         }}
       />
-      {/* <Stack.Screen 
-                name="ScheduleForm"
-                component={ScheduleForm}
-                options={{
-                    title: "ScheduleForm",
-                }}
-            /> */}
-
-      {/* <Stack.Screen
-        name="AdminProfile"
-        component={AdminProfile}
-        options={{
-          headerShown: false,
-        }}
-      /> */}
-
+    
       <Stack.Screen name="Requests" component={Requests} />
       <Stack.Screen name="Orders" component={Orders} />
       <Stack.Screen name="DocumentForm" component={DocumentForm} />

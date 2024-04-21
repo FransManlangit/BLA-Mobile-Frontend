@@ -24,15 +24,13 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  UserIcon,
-  ChevronDownIcon,
   PencilSquareIcon,
   CalendarDaysIcon,
   ArrowLeftEndOnRectangleIcon,
-  DocumentDuplicateIcon,
-  ClipboardDocumentIcon,
   InboxArrowDownIcon,
   ArrowUpOnSquareIcon,
+  LockClosedIcon,
+  PhotoIcon,
 } from "react-native-heroicons/solid";
 
 const UserProfile = () => {
@@ -64,8 +62,9 @@ const UserProfile = () => {
     navigation.navigate("StudentOrder", { request });
   };
 
-
-
+  const changepassword = (request) => {
+    navigation.navigate("ChangePassword", { request });
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -180,7 +179,6 @@ const UserProfile = () => {
                 </View>
               </TouchableOpacity>
             ) : null}
-
             {context.stateUser.user.role === "student" ||
             context.stateUser.user.role === "alumni" ? (
               <TouchableOpacity onPress={() => uploadClearance()}>
@@ -190,28 +188,50 @@ const UserProfile = () => {
                 </View>
               </TouchableOpacity>
             ) : null}
-            <TouchableOpacity onPress={() => handleEditPress()}>
+            {(context.stateUser.user.role === "student" ||
+            context.stateUser.user.role === "alumni" || context.stateUser.user.role === "admin" ) ? (
+              <TouchableOpacity onPress={() => handleEditPress()}>
+                <View className="pl-4 flex flex-row space-x-1 items-center">
+                  <PencilSquareIcon size={45} color={COLORS.versatilegray} />
+                  <Text className="font-semibold pl-4 ">Edit Profile</Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
+            {(context.stateUser.user.role === "student" ||
+            context.stateUser.user.role === "alumni" || context.stateUser.user.role === "admin" ) ? (
+              <TouchableOpacity onPress={() => changepassword()}>
+                <View className="pl-4 flex flex-row space-x-1 items-center">
+                  <LockClosedIcon size={45} color={COLORS.versatilegray} />
+                  <Text className="font-semibold pl-4 ">Change Password</Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
+            {context.stateUser.user.role === "admin" && (<TouchableOpacity onPress={() => Authorization()}>
               <View className="pl-4 flex flex-row space-x-1 items-center">
-                <PencilSquareIcon size={45} color={COLORS.versatilegray} />
-                <Text className="font-semibold pl-4 ">Edit Profile</Text>
+                <PhotoIcon size={42} color={COLORS.versatilegray} />
+                <Text className="font-semibold pl-4 ">Student's Authorization</Text>
               </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => [
-                navigation.navigate("Login"),
-                AsyncStorage.removeItem("jwt"),
-                logoutUser(context.dispatch),
-              ]}
-            >
-              <View className="pl-4 flex flex-row space-x-1 items-center">
-                <ArrowLeftEndOnRectangleIcon
-                  name="sign-out-alt"
-                  size={50}
-                  color={COLORS.versatilegray}
-                />
-                <Text className="font-semibold pl-4 ">Sign Out</Text>
-              </View>
-            </TouchableOpacity>
+            </TouchableOpacity>)}
+              
+            { (context.stateUser.user.role === "student" ||
+            context.stateUser.user.role === "alumni" || context.stateUser.user.role === "admin" ) ? (
+              <TouchableOpacity
+                onPress={() => [
+                  navigation.navigate("Login"),
+                  AsyncStorage.removeItem("jwt"),
+                  logoutUser(context.dispatch),
+                ]}
+              >
+                <View className="pl-4 flex flex-row space-x-1 items-center">
+                  <ArrowLeftEndOnRectangleIcon
+                    name="sign-out-alt"
+                    size={50}
+                    color={COLORS.versatilegray}
+                  />
+                  <Text className="font-semibold pl-4 ">Sign Out</Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </View>
       </KeyboardAwareScrollView>

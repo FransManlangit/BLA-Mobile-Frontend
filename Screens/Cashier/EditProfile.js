@@ -10,7 +10,6 @@ import { COLORS } from "../../assets/constants";
 import { StatusBar } from "expo-status-bar";
 import * as ImagePicker from "expo-image-picker";
 import Input from "../../Shared/Form/Input";
-import { Ionicons } from "@expo/vector-icons";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import mime from "mime";
 
@@ -23,8 +22,6 @@ const EditProfile = (props) => {
   const [image, setImage] = useState("");
   const [mainImage, setMainImage] = useState();
   const [token, setToken] = useState();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
   let navigation = useNavigation();
 
   const [user, setUser] = useState(props.route.params.userProfile);
@@ -32,32 +29,7 @@ const EditProfile = (props) => {
 
   const context = useContext(AuthGlobal);
 
-  const changePassword = () => {
-    console.log("Attempting to update password...");
-    const id = user._id;
-    const data = { currentPassword, newPassword };
 
-    axios
-      .put(`${baseURL}users/changePassword/${id}`, data)
-      .then((res) => {
-        console.log("Password updated successfully");
-        Toast.show({
-          topOffset: 60,
-          type: "success",
-          text1: "Password updated successfully",
-          text2: "",
-        });
-      })
-      .catch((error) => {
-        console.log("Error updating password", error);
-        Toast.show({
-          topOffset: 60,
-          type: "error",
-          text1: "Error updating password",
-          text2: "",
-        });
-      });
-  };
 
   const updateProfile = () => {
     let formData = new FormData();
@@ -209,29 +181,8 @@ const EditProfile = (props) => {
                 onChangeText={(text) => setPhone(text)}
               ></Input>
             </View>
-            <Text className="font-bold">Current Password</Text>
-            <View className="bg-black/5 p-5 rounded-xl w-64">
-              <Input
-                name={"currentPassword"}
-                id={"currentPassword"}
-                value={currentPassword}
-                secureTextEntry={true}
-                onChangeText={(text) => setCurrentPassword(text)}
-              ></Input>
-            </View>
-            <Text className="font-bold">New Password</Text>
-            <View className="bg-black/5 p-5 rounded-xl w-64">
-              <Input
-                name={"newPassword"}
-                id={"newPassword"}
-                value={newPassword}
-                secureTextEntry={true}
-                onChangeText={(text) => setNewPassword(text)}
-              ></Input>
-            </View>
           </View>
-
-          <View className="pb-6 pt-6 flex-row space-x-2">
+          <View className="pb-6 pt-6 justify-center">
             <TouchableOpacity
               className="py-3 w-32 
               bg-[#FAE500] rounded-xl "
@@ -241,15 +192,7 @@ const EditProfile = (props) => {
                 Edit
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              className="py-3 w-40 
-              bg-[#FAE500] rounded-xl "
-              onPress={() => changePassword()}
-            >
-              <Text className="text-base font-semibold text-center text-black">
-                Change Password
-              </Text>
-            </TouchableOpacity>
+
           </View>
         </View>
       </View>

@@ -71,8 +71,6 @@ const ProductContainer = () => {
  
   // console.log(CartProduct, "NAVIGATE BKIT AYAW")
   
-
-  
   const openList = () => {
     setFocus(true);
   };
@@ -142,46 +140,35 @@ const ProductContainer = () => {
       <Header />
       {loading === false ? (
         <Center>
-            <View style={styles.searchContainer}>
-            <TouchableOpacity>
-              <Feather name="search" size={25} style={styles.searchIcon} />
-            </TouchableOpacity>
-            <View style={styles.searchWrapper}>
-              <TextInput
-                onFocus={openList}
-                onChangeText={(text) => searchUser(text)}
-                placeholder="Search"
-              />
-            </View>
-            <View>
-              <TouchableOpacity 
-                style={{ ...styles.searchBtn, backgroundColor: "#B1A079" }}
-              >
-                <ShoppingCartIcon
-                 onPress={() => CartProduct()}
-                  size={SIZES.xLarge}
-                  color={COLORS.white}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-
+           <View style={styles.searchContainer}>
+                  <TouchableOpacity>
+                    <Feather
+                      name="search"
+                      size={25}
+                      style={styles.searchIcon}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.searchWrapper}>
+                    <TextInput
+                      onFocus={openList}
+                      onChangeText={(text) => searchDocument(text)}
+                      placeholder="Search"
+                    />
+                  </View>
+                  {focus && (
+                    <View className="flex flex-row item-center p-2 space-y-2">
+                    <TouchableOpacity onPress={() => setFocus(false)}>
+                      <Text className="text-base font-semibold">Cancel</Text>
+                    </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
           {focus === true ? (
             <SearchedProduct productsFiltered={productsFiltered} />
           ) : (
             <ScrollView>
               <View class="flex">
                 <Box mt={4} mb={2} ml={4}>
-                  {/* Apply custom styles to the Heading component */}
-                  {/* <Heading
-                  size="lg"
-                  fontWeight="bold"
-                  color={COLORS.brown}
-                  letterSpacing={1}
-                  textAlign="left"
-                >
-                  Announcement
-                </Heading>  */}
                 </Box>
               </View>
               <View className="pb-6">

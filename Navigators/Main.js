@@ -7,7 +7,8 @@ import HomeNavigator from "./HomeNavigator";
 import CartNavigator from "./CartNavigator";
 import AdminNavigator from "./AdminNavigator";
 import NotificationNavigator from "./NotificationNavigator";
-import DocumentNavigator from "./DocumentNavigator";
+import GuidanceNavigator from "./GuidanceNavigator";
+import CashierNavigator from "./CashierNavigator";
 import ProductContainer from "../Screens/Product/ProductContainer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -181,25 +182,57 @@ const Main = () => {
           }}
         />
       )}
-
-      <Tab.Screen
-        name="User"
-        component={UserNavigator}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color }) => {
-            return (
-              <UserCircleIcon
-                name="users"
-                style={{ position: "relative" }}
-                color={color}
-                size={40}
-              />
-            );
-          },
-        }}
-      />
-
+     {stateUser.user.role === "guidance" ? 
+    (  <Tab.Screen
+      name="Guidance"
+      component={GuidanceNavigator}
+      options={{
+        headerShown: false,
+        tabBarIcon: ({ color }) => {
+          return (
+            <UserCircleIcon
+              name="users"
+              style={{ position: "relative" }}
+              color={color}
+              size={40}
+            />
+          );
+        },
+      }}
+    />) : stateUser.user.role === "cashier" ? (<Tab.Screen
+      name="Cashier"
+      component={CashierNavigator}
+      options={{
+        headerShown: false,
+        tabBarIcon: ({ color }) => {
+          return (
+            <UserCircleIcon
+              name="users"
+              style={{ position: "relative" }}
+              color={color}
+              size={40}
+            />
+          );
+        },
+      }}
+    />) : (<Tab.Screen
+      name="User"
+      component={UserNavigator}
+      options={{
+        headerShown: false,
+        tabBarIcon: ({ color }) => {
+          return (
+            <UserCircleIcon
+              name="users"
+              style={{ position: "relative" }}
+              color={color}
+              size={40}
+            />
+          );
+        },
+      }}
+    />)
+    }
       {Admin && (
         <Tab.Screen
           name="Admin"
