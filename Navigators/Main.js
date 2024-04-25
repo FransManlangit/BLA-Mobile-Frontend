@@ -113,6 +113,7 @@ const Main = () => {
         name="Order"
         component={ProductNavigator}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color }) => {
             return (
               <>
@@ -148,6 +149,7 @@ const Main = () => {
         name="Cart"
         component={CartNavigator}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color }) => {
             return (
               <>

@@ -11,15 +11,16 @@ import {
 } from "native-base";
 import Toast from "react-native-toast-message";
 import * as actions from "../../Redux/Actions/productActions";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
 import { useDispatch } from "react-redux";
 import TrafficLight from "../../Shared/StyledComponents/TrafficLight";
 import { COLORS, SIZES } from "../../assets/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { COLOURS, Item } from "../../assets/database/Database";
 
 const SingleProduct = ({ route, navigation }) => {
   const { productName, price, description, images } = route.params.item;
-  console.log("Image product", route.params.item)
+  console.log("Image product", route.params.item);
   const [item, setItem] = useState(route.params.item);
   const [availability, setAvailability] = useState(null);
   const [availabilityText, setAvailabilityText] = useState("");
@@ -44,11 +45,17 @@ const SingleProduct = ({ route, navigation }) => {
     <SafeAreaView>
       <View className="flex bg-white h-full w-full p-2">
         <View className="flex-row justify-start pt-6">
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            className="bg-[#FAE500] p-2 rounded-tr-2xl rounded-bl-2xl ml-4"
-          >
-            <ArrowLeftIcon size="20" color="black" />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
           </TouchableOpacity>
         </View>
         <View className="pt-12">
@@ -63,33 +70,37 @@ const SingleProduct = ({ route, navigation }) => {
         </View>
         <View className="p-5">
           <View>
-            <Heading className="text-2xl text-center">{item.productName}</Heading>
+            <Heading className="text-2xl text-center">
+              {item.productName}
+            </Heading>
             <View className="space-y-6 pt-4 text-start">
               <Text className="text-base font-semibold tracking-wide">
                 ₱ {item.price}
               </Text>
-              <Text className="tracking-widest">{item.description}</Text>
+              {item.description && (
+                <Text className="tracking-widest">{item.description}</Text>
+              )}
             </View>
           </View>
         </View>
         <View className="p-2 items-center">
-        <TouchableOpacity
-          onPress={() => {
-            // Pass the entire item to addToCart
-            dispatch(actions.addToCart({ ...item, quantity: 1 }));
-            Toast.show({
-              topOffset: 60,
-              type: "success",
-              text1: `${item.productName} added to Request`,
-              text2: "Go to your cart to complete the request",
-            });
-          }}
-          className="py-3 bg-[#FAE500] rounded-xl w-44"
-        >
-          <Text className="text-base font-semibold text-center text-gray-700">
-          Order
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              // Pass the entire item to addToCart
+              dispatch(actions.addToCart({ ...item, quantity: 1 }));
+              Toast.show({
+                topOffset: 60,
+                type: "success",
+                text1: `${item.productName} added to Request`,
+                text2: "Go to your cart to complete the request",
+              });
+            }}
+            className="py-3 bg-[#FAE500] rounded-xl w-44"
+          >
+            <Text className="text-base font-semibold text-center text-gray-700">
+              Order
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

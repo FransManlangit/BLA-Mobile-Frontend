@@ -23,13 +23,6 @@ function MyStack() {
           title: "Payment",
         }}
       />
-        {/* <Stack.Screen
-        name="Product Detail"
-        component={SingleProduct}
-        options={{
-          headerShown: false,
-        }}
-      /> */}
     </Stack.Navigator>
   );
 }

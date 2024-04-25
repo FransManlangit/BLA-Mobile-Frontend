@@ -20,8 +20,6 @@ import AuthGlobal from "../../Context/Store/AuthGlobal";
 import { COLOURS, Item } from "../../assets/database/Database";
 import {
   ChevronLeftIcon,
-  TruckIcon,
-  ChevronRightIcon,
   TrashIcon,
 } from "react-native-heroicons/outline";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -103,10 +101,10 @@ const ProductCart = (props) => {
   );
 
   return (
-    <View>
-      <View className="bg-white h-full w-full">
+    <SafeAreaView>
+      <View className="bg-white h-full w-full pt-4">
         <ScrollView>
-          <View className="w-full flex-row pt-4 pl-4  justify-between items-center">
+          <View className="w-full flex-row pt-4 pl-4 justify-between items-center">
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <ChevronLeftIcon
                 name="chevron-left"
@@ -119,19 +117,13 @@ const ProductCart = (props) => {
                 }}
               />
             </TouchableOpacity>
-            <Text className="text-base text-black font-normal">
+            <Text className="text-xl font-bold text-black text-center">
               Order Details
             </Text>
             <View></View>
           </View>
-          <Text
-            className="text-xl text-black font-medium tracking-widest pt-4 pl-4 mb-2.5"
-            Text
-          >
-            My Orders
-          </Text>
-          <Text className="text-right pr-8 text-s font-semibold">Delete</Text>
-          <View className="flex pr-10 items-end">
+          <Text className="text-right pr-8 text-s font-semibold pt-10">Delete</Text>
+          <View className="flex pr-10 items-end pb-10">
             <TrashIcon
               onPress={() => dispatch(clearCart())}
               style={{ fontSize: 22, color: COLOURS.black }}
@@ -195,7 +187,7 @@ const ProductCart = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

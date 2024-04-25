@@ -18,6 +18,8 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import mime from "mime";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { COLOURS, Item } from "../../assets/database/Database";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
 
 const CreateStudent = (props) => {
   const [email, setEmail] = useState("");
@@ -150,6 +152,20 @@ const CreateStudent = (props) => {
   };
   return (
     <KeyboardAwareScrollView>
+      <View className="pt-8 pl-4">
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
+          </TouchableOpacity>
+          </View>
       <View className="items-center pt-4">
         <View title="Add Document">
           <View style={styles.imageContainer}>

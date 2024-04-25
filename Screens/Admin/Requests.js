@@ -17,7 +17,8 @@ import { COLORS, SIZES } from "../../assets/constants";
 import { Select } from "native-base";
 import axios from "axios";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import { COLOURS, Item } from "../../assets/database/Database";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
 
 
 const Requests = (props) => {
@@ -108,6 +109,20 @@ const Requests = (props) => {
 
   return (
     <KeyboardAwareScrollView >
+       <View className="pt-8 pl-4">
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
+          </TouchableOpacity>
+          </View>
       <View className="p-3">
         <KeyboardAwareScrollView 
           horizontal

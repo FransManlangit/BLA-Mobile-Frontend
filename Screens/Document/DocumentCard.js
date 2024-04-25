@@ -54,9 +54,9 @@ const DocumentCard = (props) => {
                   text2: "Go to your cart to complete Request",
                 });
             }}
-            size={30}
+            size={35}
             padding={6}
-            color={COLORS.brown}
+            color={COLORS.black}
           />
         </TouchableOpacity>
       </View>

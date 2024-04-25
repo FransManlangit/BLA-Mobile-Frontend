@@ -27,6 +27,8 @@ import EasyButton from "../../Shared/StyledComponents/EasyButtons";
 import UserListView from "./UserListView";
 import Toast from "react-native-toast-message";
 import { COLORS, SIZES } from "../../assets/constants";
+import { COLOURS, Item } from "../../assets/database/Database";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
 
 var { height, width } = Dimensions.get("window");
 
@@ -122,12 +124,21 @@ const Users = (props) => {
   );
 
   return (
-    <View className="flex-col"> 
-      {/* <Searchbar
-        width="80%"
-        placeholder="Search"
-        onChangeText={(text) => searchUser(text)}
-      /> */}
+    <View className="flex-col pt-6"> 
+    <View className="pl-4">
+       <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
+          </TouchableOpacity>
+          </View>
        <View style={styles.searchContainer}>
             <TouchableOpacity>
               <Feather name="search" size={25} style={styles.searchIcon} />
@@ -138,17 +149,6 @@ const Users = (props) => {
                 onChangeText={(text) => searchUser(text)}
                 placeholder="Search"
               />
-            </View>
-            <View>
-              <TouchableOpacity 
-                style={{ ...styles.searchBtn, backgroundColor: "#EBDE70" }}
-              >
-                <Ionicons
-                  name="qr-code-outline"
-                  size={SIZES.xLarge}
-                  color={COLORS.black}
-                />
-              </TouchableOpacity>
             </View>
           </View>
       {loading ? (
@@ -204,6 +204,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: SIZES.medium,
     marginVertical: SIZES.medium,
+    borderWidth: SIZES.xSmall,
+    borderColor: COLORS.brown,
     height: 50,
   },
 
@@ -228,6 +230,7 @@ const styles = StyleSheet.create({
     height: "100%",
     paddingHorizontal: SIZES.small,
   },
+
   searchBtn: {
     width: 50,
     height: "100%",

@@ -39,7 +39,7 @@ import baseURL from "../../assets/common/baseUrl";
 import axios from "axios";
 import { COLORS, SIZES } from "../../assets/constants";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ShoppingCartIcon } from "react-native-heroicons/mini";
+
 
 
 
@@ -137,6 +137,7 @@ const ProductContainer = () => {
 
   return (
     <KeyboardAwareScrollView>
+      <View className="bg-white">
       <Header />
       {loading === false ? (
         <Center>
@@ -205,6 +206,7 @@ const ProductContainer = () => {
           <ActivityIndicator size="large" color="red" />
         </Container>
       )}
+      </View>
     </KeyboardAwareScrollView>
   );
 };
@@ -261,6 +263,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: SIZES.medium,
     marginVertical: SIZES.medium,
+    borderWidth: SIZES.xSmall,
+    borderColor: COLORS.brown,
     height: 50,
   },
 
@@ -294,6 +298,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.primary,
   },
-});
 
+});
 export default ProductContainer;

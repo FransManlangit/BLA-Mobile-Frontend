@@ -25,6 +25,7 @@ import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { ScrollView } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 var { height, width } = Dimensions.get("window");
 
@@ -116,6 +117,7 @@ const Documents = (props) => {
   );
 
   return (
+    <SafeAreaView>
     <KeyboardAwareScrollView className="flex bg-white p-4">
       <ScrollView
         horizontal
@@ -185,6 +187,7 @@ const Documents = (props) => {
         
       )}
     </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 

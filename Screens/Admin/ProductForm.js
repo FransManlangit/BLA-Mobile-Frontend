@@ -9,10 +9,8 @@ import {
   TextInput,
 } from "react-native";
 import { Item, Picker, Select, Box } from "native-base";
-import FormContainer from "../../Shared/Form/FormContainer";
-import Input from "../../Shared/Form/Input";
-import EasyButton from "../../Shared/StyledComponents/EasyButtons";
-
+import { COLOURS } from "../../assets/database/Database";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -176,7 +174,21 @@ const ProductForm = (props) => {
   };
   return (
     <KeyboardAwareScrollView>
-      <View className="flex items-center pt-5">
+       <View className="pt-8 pl-4 bg-white">
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
+          </TouchableOpacity>
+          </View>
+      <View className="flex items-center pt-5 bg-white">
         <View title="Add Product">
           <View className="items-center">
             <View style={styles.imageContainer}>

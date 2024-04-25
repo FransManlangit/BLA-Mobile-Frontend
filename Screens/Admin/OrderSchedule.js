@@ -16,6 +16,8 @@ import {
 } from "native-base";
 import { CalendarDaysIcon } from "react-native-heroicons/solid";
 import { COLORS, SIZES } from "../../assets/constants";
+import { COLOURS, Item } from "../../assets/database/Database";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
 
 const OrderSchedule = (props) => {
   const [userList, setUserList] = useState([]);
@@ -148,6 +150,20 @@ const OrderSchedule = (props) => {
 
   return (
     <View className="bg-white h-full w-full pt-8">
+       <View className="pt-8 pl-4 pb-10">
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
+          </TouchableOpacity>
+          </View>
       <Text className="text-2xl font-semibold text-center">Set Student's Order Schedule</Text>
       <View className="pt-12">
         <Center>

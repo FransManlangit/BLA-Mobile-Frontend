@@ -21,7 +21,7 @@ function MyStack() {
                 name="Checkout"
                 component={ProductCheckoutNavigator}
                 options={{
-                    title: 'Order'
+                    headerShown: false
                 }}
             />
         </Stack.Navigator>

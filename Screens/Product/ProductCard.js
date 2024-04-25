@@ -31,7 +31,7 @@ const ProductCard = (props) => {
   // console.log(images, "Request Card");
 
   return (
-    <View className="p-8 pt-4 bg-[#FAFAFA]">
+    <View className="p-8 pt-4 bg-[#FAFAFA] ">
       <View className="max-w-[150px] justify-center items-center overflow-hidden">
       <Image
             className="w-28 h-28 rounded-xl"
@@ -61,9 +61,9 @@ const ProductCard = (props) => {
                   text2: "Go to your cart to complete Request",
                 });
             }}
-            size={30}
+            size={35}
             padding={6}
-            color={COLORS.brown}
+            color={COLORS.black}
           />
         </TouchableOpacity>
       </View>

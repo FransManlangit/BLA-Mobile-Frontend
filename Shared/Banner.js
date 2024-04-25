@@ -19,7 +19,7 @@ const Carousel = () => {
         ImageComponentStyle={{
           borderRadius: 15,
           width: "100%",
-          height: 180,
+          height: 200,
           marginTop: 15,
         }}
         autoplay

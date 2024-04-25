@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -7,98 +7,70 @@ import {
   View,
 } from "react-native";
 import { Badge, Text, VStack, Divider, HStack } from "native-base";
+import { COLORS, SIZES } from "../../assets/constants";
+import { all } from "axios";
 
 const CategoryFilter = (props) => {
+  const [activeCategory, setActiveCategory] = useState("all"); // Set the initial active category to 'all'
+
+
   return (
+    <View>
+      <Text className="pl-4 text-xl font-normal italic">Categories</Text>
     <ScrollView
-      bounces={true}
-      horizontal={true}
-      style={{ backgroundColor: "#f2f2f2" }}
+      horizontal
+      className="mt-8 px-5"
+      showsHorizontalScrollIndicator={false}
     >
-      <VStack space={4} divider={<Divider />} w="100%">
-        <HStack justifyContent="space-between">
-          <View className="flex flex-row space-x-2 pl-2">
-            <TouchableOpacity
-              key={1}
-              onPress={() => {
-                props.categoryFilter("all"), props.setActive(-1);
-              }}
+      
+      <TouchableOpacity
+        key={"all"}
+        onPress={() => {
+          setActiveCategory("all"); // Set active category to 'all'
+          props.categoryFilter("all");
+          props.setActive(-1);
+        }}
+        className="mr-8 relative "
+      >
+        <Text
+          style={{ color: COLORS.black }}
+          className={activeCategory === "all" ? "font-bold text-xl" : "text-xl"}
+        >
+          All
+        </Text>
+    
+      </TouchableOpacity>
+      {props.categories.map((item) => {
+        const isActive = item.id === activeCategory;
+        return (
+          <TouchableOpacity
+            key={item.id}
+            onPress={() => {
+              setActiveCategory(item.id); // Set active category to the id of the selected category
+              props.categoryFilter(item.id);
+              props.setActive(props.categories.indexOf(item));
+            }}
+            className="mr-8 relative"
+          >
+            <Text
+              style={{ color: COLORS.black }}
+              className={
+                activeCategory === item.id ? "font-bold text-lg" : "text-lg"
+              }
             >
-              <View className="rounded-l-full bg-[#B1A079] w-14 h-10 p-2">
-                <Text className="text-sm text-center text-white font-semibold">
-                  ALL
-                </Text>
-              </View>
-            </TouchableOpacity>
-
-            {props.categories.map((item) => (
-              <TouchableOpacity
-                key={item._id}
-                onPress={() => {
-                  props.categoryFilter(item._id),
-                    props.setActive(props.categories.indexOf(item));
-                }}
-              >
-                <View className="rounded-l-full bg-[#B1A079] w-22 h-10 p-2">
-                  <Text className="text-sm text-center text-white font-semibold">{item.name}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </HStack>
-      </VStack>
-
-      {/* <VStack space={4} divider={<Divider />} w="100%">
-                <HStack justifyContent="space-between">
-                    <TouchableOpacity
-                        key={1}
-                        onPress={() => {
-                            props.categoryFilter('all'), props.setActive(-1)
-                        }}
-                    >
-                        <Badge style={[styles.center, { margin: 4 },
-                        props.active === -1 ? styles.active : styles.inactive]} colorScheme="info" >
-                            <Text style={{ color: 'black' }}>all</Text>
-                        </Badge>
-                    </TouchableOpacity>
-                    {props.categories.map((item) => (
-                        <TouchableOpacity
-                            key={item._id}
-                            onPress={() => {
-                                props.categoryFilter(item._id),
-                                    props.setActive(props.categories.indexOf(item))
-                            }}
-                        >
-                            <Badge
-                                style={[styles.center,
-                                { margin: 5 },
-                                props.active == props.categories.indexOf(item) ? styles.active : styles.inactive
-                                ]}
-                            >
-                                <Text style={{ color: 'white' }}>{item.name}</Text>
-                            </Badge>
-                        </TouchableOpacity>
-                    ))}
-                </HStack>
-            </VStack> */}
+              {item.name}
+            </Text>
+            {isActive ? (
+              <Text className="font-extrabold text-yellow-400 -mt-3 ml-2 text-center">
+                ____
+              </Text>
+            ) : null}
+          </TouchableOpacity>
+        );
+      })}
     </ScrollView>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  center: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  active: {
-    backgroundColor: "#03bafc",
-  },
-  inactive: {
-    backgroundColor: "#a0e1eb",
-  },
-});
-
 export default CategoryFilter;
-
-
-

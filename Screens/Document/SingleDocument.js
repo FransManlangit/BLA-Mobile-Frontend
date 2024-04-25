@@ -11,11 +11,12 @@ import {
 } from "native-base";
 import Toast from "react-native-toast-message";
 import * as actions from "../../Redux/Actions/documentActions";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
 import { useDispatch } from "react-redux";
 import TrafficLight from "../../Shared/StyledComponents/TrafficLight";
 import { COLORS, SIZES } from "../../assets/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { COLOURS, Item } from "../../assets/database/Database";
 
 const SingleDocument = ({ route, navigation }) => {
   const { name, price, description, image } = route.params.item;
@@ -43,11 +44,17 @@ const SingleDocument = ({ route, navigation }) => {
     <SafeAreaView>
       <View className="flex bg-white h-full w-full p-2">
         <View className="flex-row justify-start pt-6">
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            className="bg-[#FAE500] p-2 rounded-tr-2xl rounded-bl-2xl ml-4"
-          >
-            <ArrowLeftIcon size="20" color="black" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
           </TouchableOpacity>
         </View>
         <View className="pt-12">

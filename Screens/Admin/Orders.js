@@ -14,13 +14,12 @@ import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { COLORS, SIZES } from "../../assets/constants";
-import AuthGlobal from "../../Context/Store/AuthGlobal";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Select } from "native-base";
 import OrderCard from "./OrderCard";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import { COLOURS } from "../../assets/database/Database";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
 
 const Orders = (props) => {
   const [orders, setOrders] = useState([]);
@@ -109,6 +108,20 @@ const Orders = (props) => {
 
   return (
     <KeyboardAwareScrollView>
+      <View className="pt-8 pl-4">
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
+          </TouchableOpacity>
+          </View>
       <View className="p-3">
       <KeyboardAwareScrollView 
           horizontal

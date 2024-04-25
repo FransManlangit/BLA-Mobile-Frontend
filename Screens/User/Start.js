@@ -38,7 +38,7 @@ export default function Start({ navigation }) {
               className="rounded-full bg-[#87633A] mt-6  p-4 flex items-center justify-center"
             >
               <Text className="text-white font-semibold ">
-                Register as a Guest
+              Guest
               </Text>
             </TouchableOpacity>
           </View>

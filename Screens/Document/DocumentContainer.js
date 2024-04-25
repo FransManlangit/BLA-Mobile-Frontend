@@ -96,7 +96,7 @@ const DocumentContainer = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <Header/>
+        <Header />
         <View className="p-4 bg-white">
           {loading === false ? (
             <ScrollView>
@@ -118,9 +118,9 @@ const DocumentContainer = () => {
                   </View>
                   {focus && (
                     <View className="flex flex-row item-center p-2 space-y-2">
-                    <TouchableOpacity onPress={() => setFocus(false)}>
-                      <Text className="text-base font-semibold">Cancel</Text>
-                    </TouchableOpacity>
+                      <TouchableOpacity onPress={() => setFocus(false)}>
+                        <Text className="text-base font-semibold">Cancel</Text>
+                      </TouchableOpacity>
                     </View>
                   )}
                 </View>
@@ -130,28 +130,15 @@ const DocumentContainer = () => {
                 ) : (
                   <ScrollView>
                     <Box mt={4} mb={2} ml={4}>
-                      <Text className="font-semibold text-left tracking-wider text-2xl">
+                      <Text className="font-semibold text-2xl">
                         Announcement
                       </Text>
                     </Box>
                     <View className="pb-8">
-                      <Banner />
+                      <Banner/>
                     </View>
 
-                    <View className="mt-2">
-                      <View className="flex-row justify-between items-center px-6">
-                        <Text className="text-lg font-extrabold">
-                          Documents
-                        </Text>
-                        {/*         
-                        <ShoppingBagIcon
-                          onPress={() => ProductOrder()}
-                          name="file-alt"
-                          size={24}
-                          color={COLORS.brown}
-                        /> */}
-                      </View>
-
+                    <View className="mt-2 bg-white">
                       {documents.length > 0 ? (
                         <View style={styles.listContainer}>
                           {documents.map((item) => {
@@ -268,8 +255,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.primary,
   },
-
-
 });
 
 export default DocumentContainer;

@@ -165,7 +165,12 @@ const UserProfile = () => {
                 </View>
               </TouchableOpacity>
             ) : null}
-
+            {context.stateUser.user.role === "admin" && (<TouchableOpacity onPress={() => Authorization()}>
+              <View className="pl-4 flex flex-row space-x-1 items-center">
+                <PhotoIcon size={42} color={COLORS.versatilegray} />
+                <Text className="font-semibold pl-4 ">Student's Authorization</Text>
+              </View>
+            </TouchableOpacity>)}
             {context.stateUser.user.role === "student" ||
             context.stateUser.user.role === "alumni" ? (
               <TouchableOpacity onPress={() => order()}>
@@ -206,13 +211,6 @@ const UserProfile = () => {
                 </View>
               </TouchableOpacity>
             ) : null}
-            {context.stateUser.user.role === "admin" && (<TouchableOpacity onPress={() => Authorization()}>
-              <View className="pl-4 flex flex-row space-x-1 items-center">
-                <PhotoIcon size={42} color={COLORS.versatilegray} />
-                <Text className="font-semibold pl-4 ">Student's Authorization</Text>
-              </View>
-            </TouchableOpacity>)}
-              
             { (context.stateUser.user.role === "student" ||
             context.stateUser.user.role === "alumni" || context.stateUser.user.role === "admin" ) ? (
               <TouchableOpacity

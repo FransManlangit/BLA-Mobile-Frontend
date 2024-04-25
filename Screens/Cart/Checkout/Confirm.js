@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -81,15 +81,16 @@ const Confirm = (props) => {
               console.log("response", res);
               const { checkoutUrl } = res.data;
 
-              // Handle payment logic
-              if (finalRequest.paymentInfo === "Gcash") {
+          
+              if (checkoutUrl) {
                 Linking.openURL(checkoutUrl);
+              } else {
+                
+                setTimeout(() => {
+                  dispatch(actions.clearCartDocument());
+                  navigation.navigate("Cart");
+                }, 500);
               }
-              
-              setTimeout(() => {
-                dispatch(actions.clearCartDocument());
-                navigation.navigate("Cart");
-              }, 500);
             }
           })
           .catch((error) => {
@@ -106,6 +107,7 @@ const Confirm = (props) => {
         console.error("Error retrieving token:", error);
       });
   };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View className="bg-white h-full w-full p-4">
@@ -175,6 +177,7 @@ const Confirm = (props) => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     height: height,
@@ -205,4 +208,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 });
+
 export default Confirm;
