@@ -3,8 +3,8 @@ import { Platform } from 'react-native'
 let baseURL = '';
 
 {Platform.OS == 'android'
-? baseURL = 'https://bla-mobile-backend-xe24.onrender.com/api/v1/'
-: baseURL = 'https://bla-mobile-backend-xe24.onrender.com/api/v1/'
+? baseURL = 'https://bla-mobile-backend-x60o.onrender.com/api/v1/'
+: baseURL = 'https://bla-mobile-backend-x60o.onrender.com/api/v1/'
 }
 
 export default baseURL;
