@@ -15,8 +15,7 @@ import AuthGlobal from "../../Context/Store/AuthGlobal";
 import { useNavigation } from "@react-navigation/native";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import baseURL from "../../assets/common/baseUrl";
-import FormContainer from "../../Shared/Form/FormContainer";
-import EasyButton from "../../Shared/StyledComponents/EasyButtons";
+import { InformationCircleIcon } from "react-native-heroicons/mini";
 import {
   NativeBaseProvider,
   Box,
@@ -176,7 +175,7 @@ const ViolationForm = (props) => {
               text2: "",
             });
             setTimeout(() => {
-              navigation.navigate("Guidance Profile");
+              navigation.navigate("GuidanceProfile");
             }, 500);
           }
         })
@@ -259,7 +258,13 @@ const ViolationForm = (props) => {
                 />
               </View>
             </View>
-            <Text className="font-semibold text-center pt-4">Select Date</Text>
+            <View className="flex-row pt-6 space-x-2">
+              <InformationCircleIcon color={COLORS.versatilegray} />
+              <Text className="font-normal">
+                Please select the date
+              </Text>
+             </View>
+             <Text className="font-normal ">when the violation was recorded</Text>
             <TouchableOpacity className="pt-4">
               <View className="pl-4 flex flex-row space-x-4 items-center">
                 <CalendarDaysIcon

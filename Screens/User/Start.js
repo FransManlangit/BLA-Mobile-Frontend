@@ -11,6 +11,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
 export default function Start({ navigation }) {
   return (
     <SafeAreaView>
@@ -34,7 +35,7 @@ export default function Start({ navigation }) {
               <Text className="text-white font-semibold ">Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate("Register")}
+              onPress={() => navigation.navigate("Guest")}
               className="rounded-full bg-[#87633A] mt-6  p-4 flex items-center justify-center"
             >
               <Text className="text-white font-semibold ">

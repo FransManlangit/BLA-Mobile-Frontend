@@ -80,12 +80,12 @@ const StudentsListView = ({ item, index, deleteUserViolation }) => {
         {item ? (
           <View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View className="rounded-lg h-9 ">
+              <View className="rounded-lg  ">
                 <View className="flex p-2 flex-row space-x-6 items-center">
                   <Text className="text-base w-20">{item.user.lastname}</Text>
                   <Text className="text-base w-32">{item.user.grade}</Text>
-                  <Text className="text-base w-36">{item.type}</Text>
-                  <Text className="text-base w-32">{item.description}</Text>
+                  <Text className="text-base w-44">{item.type}</Text>
+                  <Text className="text-base w-44">{item.description}</Text>
                   {item.date ? (
                     <Text className="text-base w-20">
                       {new Date(item.date).toLocaleDateString("en-US")}

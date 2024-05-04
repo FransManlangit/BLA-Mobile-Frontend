@@ -13,7 +13,8 @@ import UserUpdateStatus from "../Screens/Admin/UserUpdateStatus";
 import Notification from "../Screens/Admin/Notification";
 import CreateStudent from "../Screens/Admin/CreateStudent";
 import EditProfile from "../Screens/Admin/EditProfile";
-import AdminProfile from "../Screens/Admin/AdminProfile";
+import CreateGuest from "../Screens/Admin/CreateGuest";
+
 
 const Stack = createStackNavigator();
 
@@ -71,6 +72,7 @@ function MyStack() {
       <Stack.Screen name="OrderSchedule" component={OrderSchedule} />
       <Stack.Screen name="Notification" component={Notification} />
       <Stack.Screen name="CreateStudent" component={CreateStudent} />
+      <Stack.Screen name="CreateGuest" component={CreateGuest} />
     </Stack.Navigator>
   );
 }

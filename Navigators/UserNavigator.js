@@ -22,6 +22,7 @@ import CashierNavigator from "./CashierNavigator";
 import UploadClearance from "../Screens/User/UploadClearance";
 import Authorization from "../Screens/Admin/Authorization";
 import ChangePassword from "../Screens/User/ChangePassword";
+import Guest from "../Screens/User/Guest";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import baseURL from "../assets/common/baseUrl";
@@ -155,13 +156,6 @@ const UserNavigator = (props) => {
             />
           )}
 
-          <Stack.Screen
-            name="Starts"
-            component={Starts}
-            options={{
-              headerShown: false,
-            }}
-          />
           {Admin && (
             <Stack.Screen
               name="AdminProfile"
@@ -172,13 +166,6 @@ const UserNavigator = (props) => {
             />
           )}
 
-          <Stack.Screen
-            name="Starter"
-            component={Starter}
-            options={{
-              headerShown: false,
-            }}
-          />
           {Cashier && (
             <Stack.Screen
               name="CashierNavigator"
@@ -189,20 +176,6 @@ const UserNavigator = (props) => {
             />
           )}
 
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPassword}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="ResetPass"
-            component={ResetPasswordConfirmation}
-            options={{
-              headerShown: false,
-            }}
-          />
           <Stack.Screen
             name="UserUpdate"
             component={UserUpdate}
@@ -221,6 +194,20 @@ const UserNavigator = (props) => {
       ) : (
         <>
           <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPassword}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ResetPass"
+            component={ResetPasswordConfirmation}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
             name="Login"
             component={Login}
             options={{
@@ -229,8 +216,31 @@ const UserNavigator = (props) => {
           />
 
           <Stack.Screen
+            name="Guest"
+            component={Guest}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
             name="Register"
             component={Register}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Starter"
+            component={Starter}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Starts"
+            component={Starts}
             options={{
               headerShown: false,
             }}

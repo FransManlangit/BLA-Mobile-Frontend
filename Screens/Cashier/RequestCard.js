@@ -41,23 +41,23 @@ const RequestCard = ({ item }) => {
   const navigation = useNavigation();
 
   // Function to update the request
-  const updateRequest = () => {
+  const updateRequest = async () => {
     // Retrieve token using async storage
     AsyncStorage.getItem("jwt")
       .then((res) => {
         setToken(res);
       })
       .catch((error) => console.log(error));
-
+  
     // Define request configuration
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-
+  
     // Prepare request data
-    const request = {
+    const requestData = {
       dateofRequest: item.dateofRequest,
       paidAt: item.paidAt,
       id: item.id,
@@ -69,32 +69,50 @@ const RequestCard = ({ item }) => {
       purpose: item.purpose,
       paymentInfo: item.paymentInfo,
     };
-
-    // Make the PUT request
-    axios
-      .put(`${baseURL}requests/${item.id}`, request, config)
-      .then((res) => {
-        if (res.status === 200 || res.status === 201) {
-          Toast.show({
-            topOffset: 60,
-            type: "success",
-            text1: "Request Edited",
-            text2: "",
-          });
-          setTimeout(() => {
-            navigation.navigate("Cashier Profile");
-          }, 500);
+  
+    // Make the PUT request to update the request
+    try {
+      // Check if status is "Approved"
+      if (requestStatusChange === "Approved") {
+        // Fetch user balances
+        const balancesResponse = await axios.get(`${baseURL}balances`);
+        const balances = balancesResponse.data;
+  
+        // Check if any balance exists for the user
+        if (balances && balances.length > 0) {
+          const studentHasBalance = balances.some((balance) => balance.user._id === item.user._id);
+          if (studentHasBalance) {
+            Toast.show({
+              type: "info",
+              text1: `Attention: Student ${item.user.lastname} has a balance.`,
+            });
+            return;
+          }
         }
-      })
-      .catch((error) => {
+      }
+  
+      // Proceed with updating the request if no balance found
+      const updatedResponse = await axios.put(`${baseURL}requests/${item.id}`, requestData, config);
+  
+      if (updatedResponse.status === 200 || updatedResponse.status === 201) {
         Toast.show({
-          topOffset: 60,
-          type: "error",
-          text1: "Something went wrong",
-          text2: "Please try again",
+          type: "success",
+          text1: "Request Updated Successfully",
         });
+        navigation.navigate("CashierProfile");
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Something Went Wrong",
+        text2: "Please Try Again",
       });
+      console.error("Update Request Failed:", error);
+    }
   };
+  
+  
+  
 
   useEffect(() => {
     // Set request status and card color based on item status
@@ -188,8 +206,6 @@ const RequestCard = ({ item }) => {
               {item.dateofRequest.split("T")[0]}
             </Text>
           </View>
-       
-         
           <Spacer />
           <Text className="font-bold text-xl">Request List</Text>
           <View className="flex flex-col space-y-4">
@@ -223,7 +239,7 @@ const RequestCard = ({ item }) => {
           </FormControl>
           <View className="items-center pt-4">
             <TouchableOpacity
-              onPress={() => updateRequest()}
+             onPress={() => updateRequest()}
               className="py-3 bg-[#FAE500] rounded-xl w-28 h-12"
             >
               <Text className="text-base font-bold text-center text-gray-700">

@@ -7,17 +7,25 @@ import Students from "../Screens/Guidance/Students";
 import Requests from "../Screens/Guidance/Requests";
 import Clearance from "../Screens/Guidance/Clearance";
 import SingleClearance from "../Screens/Guidance/SingleClearance";
+import Login from "../Screens/User/Login";
 
 const Stack = createStackNavigator();
 
 const GuidanceNavigator = (props) => {
   return (
     <Stack.Navigator
-      initialRouteName="Guidance Profile"
+      initialRouteName="GuidanceProfile"
       screenOptions={{
         headerShown: false,
       }}
     >
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="Students"
         component={Students}
@@ -33,7 +41,7 @@ const GuidanceNavigator = (props) => {
       ></Stack.Screen>
 
       <Stack.Screen
-        name="Guidance Profile"
+        name="GuidanceProfile"
         component={GuidanceProfile}
         options={{
           headerShown: false,

@@ -179,9 +179,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import { format } from "date-fns";
 
 const RequestDetails = ({ route }) => {
   const { request } = route.params;
+  console.log("User", request)
   const [requestItems, setRequestItems] = useState([]);
   const navigation = useNavigation();
 
@@ -217,7 +219,7 @@ const RequestDetails = ({ route }) => {
       </p>
       <p class="flex justify-between">
         <span class="text-zinc-600">Date of Request:</span>
-        <span>${formatDate(request.dateofRequest)}</span>
+        <span>${format(new Date(request.dateofRequest), "MMMM dd, yyyy")}</span>
       </p>
       <p class="flex justify-between">
         <span class="text-zinc-600">Payor:</span>
@@ -244,17 +246,17 @@ const RequestDetails = ({ route }) => {
       
         <tr class="flex flex-col ">
          ${request.requestItems
-            .map(
-          (requestItem) => `
+           .map(
+             (requestItem) => `
           <tr class="flex justify-between">
-          <td class="flex-1">${requestItem.document.name}</td>
-          <td class="min-w-[44px]">₱${requestItem.document.price.toFixed(
+          <td class="flex-1">${requestItem.name}</td>
+          <td class="min-w-[44px]">₱${requestItem.price.toFixed(
             2
           )}</td>
         </tr>
         `
-            )
-            .join("")}</td>
+           )
+           .join("")}</td>
         </tr>
         
       </tbody>
@@ -284,45 +286,36 @@ const RequestDetails = ({ route }) => {
     }
   };
 
-  const formatDate = (date) => {
-    // Convert date to a JavaScript Date object
-    const newDate = new Date(date);
+  useEffect(() => {
+  const fetchRequestItems = async () => {
+    try {
+      // Fetch request items
+      const response = await axios.get(`${baseURL}requests/get/userRequests/${request._id}`);
+      setRequestItems(response.data[0]?.requestItems || []);
 
-    // Extract date parts
-    const year = newDate.getFullYear();
-    const month = newDate.getMonth() + 1;
-    const day = newDate.getDate();
+      // Fetch user details using user ID from the request
+      const userResponse = await axios.get(`${baseURL}users/${request.user}`);
+      const user = userResponse.data;
+      
+      // Update the request object with user details
+      setRequest(prevRequest => ({
+        ...prevRequest,
+        user: {
+          firstname: user.firstname,
+          lastname: user.lastname
+        }
+      }));
 
-    // Format the date in YYYY-MM-DD format
-    const formattedDate = `${year}-${month < 10 ? "0" + month : month}-${
-      day < 10 ? "0" + day : day
-    }`;
-
-    return formattedDate;
+      console.log("Data fetching successful");
+    } catch (error) {
+      console.error("Error fetching request items:", error);
+    }
   };
 
-  useEffect(() => {
-    const fetchRequestItems = async () => {
-      try {
-        const response = await axios.get(
-          `${baseURL}requests/get/userRequests/${request._id}`
-        );
+  fetchRequestItems();
+}, [request._id]);
 
-        // Update state with the request items from the response
-        setRequestItems(response.data[0]?.requestItems || []); // Adjust the array index based on your response structure
-      } catch (error) {
-        console.error("Error fetching request items:", error);
-        // Add additional error handling logic, such as displaying an error message to the user.
-      }
-      console.log(request, "frans330928");
-    };
-
-    console.log("Request ID:", request._id); // Log request ID before making the request
-
-    fetchRequestItems();
-  }, [request._id]);
-
-  console.log("Request Items:", requestItems);
+  
 
   return (
     <SafeAreaView>
@@ -351,19 +344,19 @@ const RequestDetails = ({ route }) => {
                   >
                     <View className="flex flex-row space-x-4">
                       <Text className="text-lg">{"\u2022"}</Text>
-                      <Text className="text-lg w-6/12">
-                        {requestItem.document.name}
+                      <Text className="text-base w-7/12">
+                        {requestItem.name}
                       </Text>
-                      <Text className="text-lg pl-10">
+                      <Text className="text-lg w-4/12">
                         {" "}
-                        {requestItem.document.price}
+                        {requestItem.price}
                       </Text>
                     </View>
                   </View>
                 ))}
                 <View className="flex flex-row pt-4">
                   <Text className="font-bold text-base">Total Price:</Text>
-                  <Text className="text-right w-7/12 text-xl">
+                  <Text className="text-right w-7/12 text-lg">
                     {request.totalPrice}
                   </Text>
                 </View>
@@ -372,7 +365,7 @@ const RequestDetails = ({ route }) => {
                     <Text className="font-bold text-base">
                       Request Purpose:
                     </Text>
-                    <Text className="text-right w-5/12 text-base">
+                    <Text className="text-right w-40 text-sm">
                       {request.purpose}
                     </Text>
                   </View>
@@ -387,7 +380,7 @@ const RequestDetails = ({ route }) => {
                       Date of Request:
                     </Text>
                     <Text className="text-right w-32 text-sm">
-                      {formatDate(request.dateofRequest)}
+                    {format(new Date(request?.dateofRequest), "MMMM dd, yyyy")}
                     </Text>
                   </View>
                 </View>
@@ -411,3 +404,4 @@ const RequestDetails = ({ route }) => {
 };
 
 export default RequestDetails;
+  

@@ -143,7 +143,7 @@ const Products = (props) => {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.navigate("OrderSchedule")}
           >
             <View className="rounded-l-full bg-[#B1A079] w-42 h-10 p-2">
@@ -151,7 +151,7 @@ const Products = (props) => {
                 Set Order Schedule
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
       <View style={styles.searchContainer}>

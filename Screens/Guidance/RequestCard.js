@@ -16,11 +16,8 @@ import {
   CheckIcon,
   Spacer,
 } from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome";
 import TrafficLight from "../../Shared/StyledComponents/TrafficLight";
-import EasyButton from "../../Shared/StyledComponents/EasyButtons";
 import Toast from "react-native-toast-message";
-import { Ionicons, Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
@@ -29,8 +26,7 @@ import { useNavigation } from "@react-navigation/native";
 // Define status codes
 const codes = [
   { name: "Approved", code: "Approved" },
-  { name: "Pending Violation", code: "Pending Vioaltion" }, 
-  
+  { name: "Pending Violation", code: "Pending Violation" },
 ];
 
 const RequestCard = ({ item }) => {
@@ -42,7 +38,7 @@ const RequestCard = ({ item }) => {
   const navigation = useNavigation();
 
   // Function to update the request
-  const updateRequest = () => {
+  const updateRequest = async () => {
     // Retrieve token using async storage
     AsyncStorage.getItem("jwt")
       .then((res) => {
@@ -58,7 +54,7 @@ const RequestCard = ({ item }) => {
     };
 
     // Prepare request data
-    const request = {
+    const requestData = {
       dateofRequest: item.dateofRequest,
       paidAt: item.paidAt,
       id: item.id,
@@ -71,30 +67,47 @@ const RequestCard = ({ item }) => {
       paymentInfo: item.paymentInfo,
     };
 
-    // Make the PUT request
-    axios
-      .put(`${baseURL}requests/${item.id}`, request, config)
-      .then((res) => {
-        if (res.status === 200 || res.status === 201) {
+    // Make the PUT request to update the request
+    try {
+      // Check if status is "Approved"
+      if (requestStatusChange === "Approved") {
+        const violationsResponse = await axios.get(`${baseURL}violations`);
+        const violations = violationsResponse.data;
+
+        const studentHasViolation = violations.some(
+          (violation) => violation.user._id === item.user._id
+        );
+        if (studentHasViolation) {
           Toast.show({
-            topOffset: 60,
-            type: "success",
-            text1: "Request Edited",
-            text2: "",
+            type: "info",
+            text1: `Attention: Student ${item.user.lastname} has a Violation.`,
           });
-          setTimeout(() => {
-            navigation.navigate("Guidance Profile");
-          }, 500);
+          return;
         }
-      })
-      .catch((error) => {
+      }
+
+      // Proceed with updating the request if no balance found
+      const updatedResponse = await axios.put(
+        `${baseURL}requests/${item.id}`,
+        requestData,
+        config
+      );
+
+      if (updatedResponse.status === 200 || updatedResponse.status === 201) {
         Toast.show({
-          topOffset: 60,
-          type: "error",
-          text1: "Something went wrong",
-          text2: "Please try again",
+          type: "success",
+          text1: "Request Updated Successfully",
         });
+        navigation.navigate("GuidanceProfile");
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Something Went Wrong",
+        text2: "Please Try Again",
       });
+      console.error("Update Request Failed:", error);
+    }
   };
 
   useEffect(() => {
@@ -108,11 +121,11 @@ const RequestCard = ({ item }) => {
       setStatusText("Declined");
       setCardColor("#c6131b");
     } else if (item.requestStatus === "Received") {
-      setRequestStatus(<TrafficLight Received />);
+      setRequestStatus(<TrafficLight received />);
       setStatusText("Received");
       setCardColor("#006899");
     } else if (item.requestStatus === "Pending Violation") {
-      setRequestStatus(<TrafficLight Pending Violation/>);
+      setRequestStatus(<TrafficLight Pending Violation />);
       setStatusText("Pending Violation");
       setCardColor("#c6131b");
     } else if (item.requestStatus === "Setel your Balance") {
@@ -189,15 +202,12 @@ const RequestCard = ({ item }) => {
               {item.dateofRequest.split("T")[0]}
             </Text>
           </View>
-       
-         
           <Spacer />
           <Text className="font-bold text-xl">Request List</Text>
           <View className="flex flex-col space-y-4">
             {item.requestItems.map((requestItem, index) => (
               <View key={index} className="flex flex-row">
                 <Text className="text-base">{requestItem.document?.name}</Text>
-              
               </View>
             ))}
           </View>

@@ -1,52 +1,34 @@
-import React, { useContext, useState, useCallback } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  Button,
-  Image,
-  Text,
-} from "react-native";
+import React, { useContext, useState, useCallback, useEffect } from "react";
+import { View, TouchableOpacity, Text } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
 import AuthGlobal from "../../Context/Store/AuthGlobal";
-import { COLORS, SIZES } from "../../assets/constants";
-import { useSelector, useDispatch } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
+import { useDispatch } from "react-redux";
+import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Header from "../../Shared/Header";
-import {
-  NativeBaseProvider,
-  Box,
-  HStack,
-  VStack,
-  FlatList,
-  Heading,
-  Avatar,
-  Spacer,
-  Center,
-} from "native-base";
+import { Spacer } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { InformationCircleIcon } from "react-native-heroicons/mini";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { format } from "date-fns";
+import { InformationCircleIcon } from "react-native-heroicons/mini";
+import { COLORS, SIZES } from "../../assets/constants";
 
-const StudentRequest = () => {
+const StudentOrder = () => {
   const context = useContext(AuthGlobal);
   const [userProfile, setUserProfile] = useState("");
   const [orders, setOrders] = useState([]);
-  const navigation = useNavigation();
   const [schedules, setSchedules] = useState([]);
+  console.log(orders, "Student Order List");
+  const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  // Function to handle order press
   const handleOrderPress = (order) => {
     navigation.navigate("Order Details", { order });
   };
-
+  // Fetch user profile and orders on component focus
   useFocusEffect(
     useCallback(() => {
       if (
@@ -59,7 +41,6 @@ const StudentRequest = () => {
       AsyncStorage.getItem("jwt")
         .then((res) => {
           axios
-
             .get(`${baseURL}users/${context.stateUser.user.userId}`, {
               headers: { Authorization: `Bearer ${res}` },
             })
@@ -73,13 +54,6 @@ const StudentRequest = () => {
         .then((res) => setOrders(res.data))
         .catch((error) => console.log(error));
 
-      axios
-        .get(
-          `${baseURL}schedules/userSchedule/${context.stateUser.user.userId}`
-        )
-        .then((res) => setSchedules(res.data))
-        .catch((error) => console.log(error));
-
       return () => {
         setUserProfile("");
         setOrders([]);
@@ -87,6 +61,25 @@ const StudentRequest = () => {
       };
     }, [context.stateUser.isAuthenticated])
   );
+
+  // Fetch schedules for each order if orderId exists
+  useEffect(() => {
+    if (orders.length > 0) {
+      orders.forEach((order) => {
+        axios
+          .get(`${baseURL}schedules/userOrderSchedule/${order._id}`)
+          .then((res) => {
+            if (res.data.dateTime) {
+              setSchedules((prevSchedules) => [
+                ...prevSchedules,
+                { orderId: order._id, dateTime: res.data.dateTime },
+              ]);
+            }
+          })
+          .catch((error) => console.log(error));
+      });
+    }
+  }, [orders]);
 
   const currentDate = new Date();
 
@@ -105,7 +98,7 @@ const StudentRequest = () => {
                 </TouchableOpacity>
               </View>
               <Text className="text-3xl font-bold text-center text-[#FFFBF1] pt-6 pb-4">
-                Request History
+                Order History
               </Text>
             </View>
           </View>
@@ -115,13 +108,11 @@ const StudentRequest = () => {
               <View className="flex flex-col space-y-2 pb-12">
                 <View className="pl-4 flex flex-row space-x-4 items-center">
                   <InformationCircleIcon color={COLORS.versatilegray} />
-                  <Text className="text-base">
-                    Click the Status below to view more details.
-                  </Text>
+                  <Text className="text-base">Click the Status below to view more details</Text>
                 </View>
                 <View className="pl-4 flex flex-row space-x-4 items-center">
                   <InformationCircleIcon color={COLORS.versatilegray} />
-                  <Text className="text-lg">Swipe left to view more</Text>
+                  <Text className="text-lg">Swipe left to view More</Text>
                 </View>
               </View>
               <View className="items-center pb-12">
@@ -141,8 +132,8 @@ const StudentRequest = () => {
                 <View className="flex pt-2 p-2 flex-row space-x-6 items-center">
                   <Text className="text-xl w-24">Order</Text>
                   <Text className="text-xl w-24">Status</Text>
-                  <Text className="text-xl w-32">Date for claming</Text>
-                  <Text className="text-xl w-24 text-center">Time</Text>
+                  <Text className="text-xl w-32">Date for Claming</Text>
+      
                 </View>
               </KeyboardAwareScrollView>
               <KeyboardAwareScrollView
@@ -165,6 +156,13 @@ const StudentRequest = () => {
                           <Text className="text-lg w-28 pl-6">
                             {order.orderStatus}
                           </Text>
+                          {schedules && schedules.length > 0 && (
+                            <Text className="text-base text-center pl-8">
+                              {schedules.find((schedule) => schedule.orderId === order._id)
+                                ? format(new Date(schedules.find((schedule) => schedule.orderId === order._id).dateTime), "MMMM dd, yyyy")
+                                : "No Date"}
+                            </Text>
+                          )}
                         </View>
 
                         <Spacer />
@@ -172,21 +170,9 @@ const StudentRequest = () => {
                     ))
                   ) : (
                     <View className="">
-                      <Text className="">You have no Orders</Text>
+                      <Text className="">You have no orders</Text>
                     </View>
                   )}
-                  {schedules &&
-                    schedules.length > 0 &&
-                    schedules.map((schedule, index) => (
-                      <View key={index} className="flex-row space-x-4">
-                        <Text className="text-lg">
-                          {format(new Date(schedule.DateTime), "MMMM dd, yyyy")}
-                        </Text>
-                        <Text className="text-lg">
-                          {format(new Date(schedule.DateTime), "hh:mm:ss a")}
-                        </Text>
-                      </View>
-                    ))}
                 </View>
               </KeyboardAwareScrollView>
             </View>
@@ -197,4 +183,4 @@ const StudentRequest = () => {
   );
 };
 
-export default StudentRequest;
+export default StudentOrder;

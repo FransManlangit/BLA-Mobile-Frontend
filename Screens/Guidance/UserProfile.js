@@ -125,49 +125,50 @@ const UserProfile = () => {
             </View>
           </View>
           <View className="flex flex-col gap-6 pt-4 ">
-            <TouchableOpacity onPress={() => Guidance()}>
-              {context.stateUser.user.role === "guidance" ? (
+            <TouchableOpacity onPress={Guidance}>
+              {context.stateUser.user.role === "guidance" && (
                 <View className="pl-4 flex flex-row space-x-1 items-center">
                   <ClipboardDocumentIcon
                     size={45}
                     color={COLORS.versatilegray}
                   />
-                  <Text className="font-semibold pl-4 ">Student Requests</Text>
+                  <Text className="font-semibold pl-4">Student Requests</Text>
                 </View>
-              ) : null}
+              )}
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => clearancelist()}>
-              {context.stateUser.user.role === "guidance" ? (
+            <TouchableOpacity onPress={clearancelist}>
+              {context.stateUser.user.role === "guidance" && (
                 <View className="pl-4 flex flex-row space-x-1 items-center">
                   <ListBulletIcon size={45} color={COLORS.versatilegray} />
-                  <Text className="font-semibold pl-4 ">
+                  <Text className="font-semibold pl-4">
                     Student's Clearance List
                   </Text>
                 </View>
-              ) : null}
+              )}
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => studentlist()}>
-              {context.stateUser.user.role === "guidance" ? (
+            <TouchableOpacity onPress={studentlist}>
+              {context.stateUser.user.role === "guidance" && (
                 <View className="pl-4 flex flex-row space-x-1 items-center">
                   <UserGroupIcon size={45} color={COLORS.versatilegray} />
-                  <Text className="font-semibold pl-4 ">
+                  <Text className="font-semibold pl-4">
                     Student's with Violation
                   </Text>
                 </View>
-              ) : null}
+              )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleViolationPress()}>
-              {context.stateUser.user.role === "guidance" ? (
+              {context.stateUser.user.role === "guidance" && (
                 <View className="pl-4 flex flex-row space-x-1 items-center">
                   <ShieldExclamationIcon
                     size={45}
                     color={COLORS.versatilegray}
                   />
-                  <Text className="font-semibold pl-4 ">Add Student's Violation</Text>
+                  <Text className="font-semibold pl-4">
+                    Add Student's Violation
+                  </Text>
                 </View>
-              ) : null}
+              )}
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => handleEditPress()}>
               <View className="pl-4 flex flex-row space-x-1 items-center">
                 <PencilSquareIcon size={45} color={COLORS.versatilegray} />
@@ -175,11 +176,11 @@ const UserProfile = () => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => [
-                navigation.navigate("Login"),
-                AsyncStorage.removeItem("jwt"),
-                logoutUser(context.dispatch),
-              ]}
+              onPress={async () => {
+                await AsyncStorage.removeItem("jwt");
+                logoutUser(context.dispatch);
+                navigation.navigate("Login");
+              }}
             >
               <View className="pl-4 flex flex-row space-x-1 items-center">
                 <ArrowLeftEndOnRectangleIcon
@@ -187,7 +188,7 @@ const UserProfile = () => {
                   size={50}
                   color={COLORS.versatilegray}
                 />
-                <Text className="font-semibold pl-4 ">Sign Out</Text>
+                <Text className="font-semibold pl-4">Sign Out</Text>
               </View>
             </TouchableOpacity>
           </View>

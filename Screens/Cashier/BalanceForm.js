@@ -126,7 +126,7 @@ const BalanceForm = (props) => {
               text2: "",
             });
             setTimeout(() => {
-              navigation.navigate("Cashier Profile");
+              navigation.navigate("CashierProfile");
             }, 500);
           }
         })

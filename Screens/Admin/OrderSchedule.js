@@ -5,21 +5,15 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import AuthGlobal from "../../Context/Store/AuthGlobal";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import baseURL from "../../assets/common/baseUrl";
-import {
-  FormControl,
-  Center,
-  CheckIcon,
-  Select,
-  WarningOutlineIcon,
-} from "native-base";
+import { FormControl, Center, CheckIcon, Select } from "native-base";
 import { CalendarDaysIcon } from "react-native-heroicons/solid";
-import { COLORS, SIZES } from "../../assets/constants";
-import { COLOURS, Item } from "../../assets/database/Database";
+import { COLORS } from "../../assets/constants";
 import { ChevronLeftIcon } from "react-native-heroicons/outline";
+import { COLOURS, Item } from "../../assets/database/Database";
 
-const OrderSchedule = (props) => {
+const OrderSchedule = () => {
   const [userList, setUserList] = useState([]);
   const [user, setUser] = useState("");
   const [DateTime, setDateTime] = useState("");
@@ -33,6 +27,7 @@ const OrderSchedule = (props) => {
 
   const context = useContext(AuthGlobal);
   const navigation = useNavigation();
+  const route = useRoute();
 
   useEffect(() => {
     if (context.stateUser.isAuthenticated) {
@@ -47,31 +42,12 @@ const OrderSchedule = (props) => {
     }
   }, []);
 
-  const showDatePicker = (type) => {
-    setDatePickerType(type);
-    if (type === "start") {
-      setStartDatePickerVisibility(true);
-    }
-  };
-
-  const hideDatePicker = () => {
-    setStartDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date) => {
-    const formattedDate = date.toISOString();
-    if (datePickerType === "start") {
-      setDateTime(formattedDate);
-    }
-    hideDatePicker();
-  };
-
   useEffect(() => {
-    if (!props.route.params) {
+    if (!route.params) {
       setSchedule(null);
     } else {
-      setSchedule(props.route.params.schedule.Schedule);
-      setDateTime(props.route.params.schedule.DateTime);
+      setSchedule(route.params.schedule.Schedule);
+      setDateTime(route.params.schedule.DateTime);
     }
     AsyncStorage.getItem("jwt")
       .then((res) => {
@@ -100,14 +76,35 @@ const OrderSchedule = (props) => {
       });
   }, []);
 
+  const showDatePicker = (type) => {
+    setDatePickerType(type);
+    if (type === "start") {
+      setStartDatePickerVisibility(true);
+    }
+  };
+
+  const hideDatePicker = () => {
+    setStartDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    const formattedDate = date.toISOString();
+    if (datePickerType === "start") {
+      setDateTime(formattedDate);
+    }
+    hideDatePicker();
+  };
+
   const addOrUpdateSchedule = () => {
-    if (DateTime === "") {
+    if (DateTime === "" || user === "") {
       setError("Please fill in the form correctly");
       return;
     }
+    const orderId = route.params.schedule.orderId; // Get orderId from route params
     const Schedule = {
       DateTime,
       user,
+      orderId, // Include orderId in the request body
     };
     const config = {
       headers: {
@@ -117,7 +114,7 @@ const OrderSchedule = (props) => {
     };
     const url = schedule
       ? `${baseURL}schedules/${schedule.id}`
-      : `${baseURL}schedules/orderSchdule`;
+      : `${baseURL}schedules/orderSchedule`;
     const method = schedule ? axios.put : axios.post;
 
     method(url, Schedule, config)
@@ -126,14 +123,10 @@ const OrderSchedule = (props) => {
           Toast.show({
             topOffset: 60,
             type: "success",
-            text1: schedule
-              ? "Schedule successfully updated"
-              : "Schedule Added",
+            text1: schedule ? "Schedule successfully updated" : "Schedule Added",
           });
           setTimeout(() => {
-            navigation.navigate(
-              schedule ? "SchedulesContainer" : "Products"
-            );
+            navigation.navigate(schedule ? "SchedulesContainer" : "Products");
           }, 500);
         }
       })
@@ -150,20 +143,20 @@ const OrderSchedule = (props) => {
 
   return (
     <View className="bg-white h-full w-full pt-8">
-       <View className="pt-8 pl-4 pb-10">
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <ChevronLeftIcon
-              name="chevron-left"
-              style={{
-                fontSize: 18,
-                color: COLOURS.backgroundDark,
-                padding: 12,
-                backgroundColor: COLOURS.backgroundLight,
-                borderRadius: 12,
-              }}
-            />
-          </TouchableOpacity>
-          </View>
+      <View className="pt-8 pl-4 pb-10">
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <ChevronLeftIcon
+            name="chevron-left"
+            style={{
+              fontSize: 18,
+              color: COLOURS.backgroundDark,
+              padding: 12,
+              backgroundColor: COLOURS.backgroundLight,
+              borderRadius: 12,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
       <Text className="text-2xl font-semibold text-center">Set Student's Order Schedule</Text>
       <View className="pt-12">
         <Center>
@@ -181,7 +174,7 @@ const OrderSchedule = (props) => {
               }}
               mt="1"
             >
-             {userList.map((user) => (
+              {userList.map((user) => (
                 <Select.Item
                   key={user._id}
                   label={`${user.firstname} ${user.lastname} - Grade: ${user.grade}`}
@@ -189,11 +182,6 @@ const OrderSchedule = (props) => {
                 />
               ))}
             </Select>
-            {/* <FormControl.ErrorMessage
-              leftIcon={<WarningOutlineIcon size="xs" />}
-            >
-              Please make a selection!
-            </FormControl.ErrorMessage> */}
           </FormControl>
           <Text className="font-semibold text-center text-xl pt-4">
             Select Schedule
@@ -235,7 +223,6 @@ const OrderSchedule = (props) => {
       </View>
     </View>
   );
-
 };
 
 export default OrderSchedule;

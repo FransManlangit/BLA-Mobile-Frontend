@@ -8,6 +8,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import { format } from "date-fns";
 
 const OrderDetails = ({ route }) => {
   const { order } = route.params;
@@ -45,8 +46,8 @@ const OrderDetails = ({ route }) => {
         <span>BLA-${order._id.substring(0, 7)}</span>
       </p>
       <p class="flex justify-between">
-        <span class="text-zinc-600">Date of Request:</span>
-        <span>${formatDate(order.dateOrdered)}</span>
+        <span class="text-zinc-600">Date of Order:</span>
+        <span>${format(new Date(order.dateOrdered), "MMMM dd, yyyy")}</span>
       </p>
       <p class="flex justify-between">
         <span class="text-zinc-600">Payor:</span>

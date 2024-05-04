@@ -42,7 +42,7 @@ const ChangePassword = (props) => {
           text1: "Password updated successfully",
           text2: "",
         });
-        navigation.navigate("Cashier Profile");
+        navigation.navigate("CashierProfile");
       })
       .catch((error) => {
         console.log("Error updating password", error);

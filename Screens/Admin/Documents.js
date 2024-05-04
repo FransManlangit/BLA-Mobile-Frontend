@@ -130,11 +130,11 @@ const Documents = (props) => {
               <Text className="font-semibold text-white text-center">All Products</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("ScheduleForm")}>
+          {/* <TouchableOpacity onPress={() => navigation.navigate("ScheduleForm")}>
             <View className="rounded-l-full bg-[#B1A079] w-40 h-10 p-2">
               <Text className="font-semibold text-white text-center">Set Student's Schedule</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={() => navigation.navigate("Requests")}>
             <View className="rounded-l-full bg-[#B1A079] w-36 h-10 p-2">
               <Text className="font-semibold text-white text-center">Student's Request</Text>
@@ -147,8 +147,13 @@ const Documents = (props) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("CreateStudent")}>
-            <View className="rounded-l-full bg-[#B1A079] w-32 h-10 p-2">
-              <Text className="font-semibold text-white text-center">Add Student's</Text>
+            <View className="rounded-l-full bg-[#B1A079] w-38 h-10 p-2">
+              <Text className="font-semibold text-white text-center">Create Student's Account</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("CreateGuest")}>
+            <View className="rounded-l-full bg-[#B1A079] w-38 h-10 p-2">
+              <Text className="font-semibold text-white text-center">Create Guest Account</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Users")}>

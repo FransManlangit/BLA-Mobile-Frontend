@@ -36,14 +36,13 @@ import {
 const UserProfile = () => {
   const context = useContext(AuthGlobal);
   const [userProfile, setUserProfile] = useState("");
-  // console.log(userProfile, "IDK JDSDHSA")
   const [requests, setRequests] = useState([]);
   console.log(requests, "Profile");
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const studentRequest = (request) => {
-    navigation.navigate("StudentRequest", { request });
+  const studentRequest = () => {
+    navigation.navigate("StudentRequest", {userId: context.stateUser.user.userId});
   };
 
   const dateSchedule = (request) => {
@@ -161,7 +160,7 @@ const UserProfile = () => {
                     size={45}
                     color={COLORS.versatilegray}
                   />
-                  <Text className="font-semibold pl-4 ">Date Schedule</Text>
+                  <Text className="font-semibold pl-4 ">Schedule for Claiming of Request</Text>
                 </View>
               </TouchableOpacity>
             ) : null}
@@ -214,21 +213,21 @@ const UserProfile = () => {
             { (context.stateUser.user.role === "student" ||
             context.stateUser.user.role === "alumni" || context.stateUser.user.role === "admin" ) ? (
               <TouchableOpacity
-                onPress={() => [
-                  navigation.navigate("Login"),
-                  AsyncStorage.removeItem("jwt"),
-                  logoutUser(context.dispatch),
-                ]}
-              >
-                <View className="pl-4 flex flex-row space-x-1 items-center">
-                  <ArrowLeftEndOnRectangleIcon
-                    name="sign-out-alt"
-                    size={50}
-                    color={COLORS.versatilegray}
-                  />
-                  <Text className="font-semibold pl-4 ">Sign Out</Text>
-                </View>
-              </TouchableOpacity>
+              onPress={async () => {
+                await AsyncStorage.removeItem("jwt");
+                logoutUser(context.dispatch);
+                navigation.navigate("Login");
+              }}
+            >
+              <View className="pl-4 flex flex-row space-x-1 items-center">
+                <ArrowLeftEndOnRectangleIcon
+                  name="sign-out-alt"
+                  size={50}
+                  color={COLORS.versatilegray}
+                />
+                <Text className="font-semibold pl-4 ">Sign Out</Text>
+              </View>
+            </TouchableOpacity>
             ) : null}
           </View>
         </View>

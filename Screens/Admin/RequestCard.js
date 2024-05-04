@@ -16,15 +16,16 @@ import {
   CheckIcon,
   Spacer,
 } from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome";
 import TrafficLight from "../../Shared/StyledComponents/TrafficLight";
-import EasyButton from "../../Shared/StyledComponents/EasyButtons";
 import Toast from "react-native-toast-message";
-import { Ionicons, Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
+import { CalendarDaysIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
+import { COLORS, SIZES } from "../../assets/constants";
+import { format } from "date-fns";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 // Define status codes
 const codes = [
@@ -39,7 +40,100 @@ const RequestCard = ({ item }) => {
   const [requestStatusChange, setRequestStatusChange] = useState();
   const [token, setToken] = useState();
   const [cardColor, setCardColor] = useState();
+  const [error, setError] = useState("");
+  const [dateRelease, setDateRelease] = useState("");
+  const [datePickerType, setDatePickerType] = useState("");
+  const [isStartDatePickerVisible, setStartDatePickerVisibility] =
+    useState(false);
   const navigation = useNavigation();
+  
+
+  const showDatePicker = (type) => {
+    setDatePickerType(type);
+    if (type === "start") {
+      setStartDatePickerVisibility(true);
+    }
+  };
+
+  const hideDatePicker = () => {
+    setStartDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    const formattedDate = date.toISOString();
+    console.log("Dateee", date);
+    setDateRelease(date);
+
+    hideDatePicker();
+  };
+
+  const SetRequestSchedule = () => {
+    // Check if the request status is not "Approved"
+    if (item.requestStatus !== "Approved") {
+      Toast.show({
+        topOffset: 60,
+        type: "error",
+        text1: "Cannot Set Schedule",
+        text2: `Request status is ${item.requestStatus}`,
+      });
+      setDateRelease(""); // Clear the date
+      return;
+    }
+  
+    if (dateRelease === "") {
+      setError("Please fill in the form correctly");
+      return;
+    }
+  
+    // Retrieve token using async storage
+    AsyncStorage.getItem("jwt")
+      .then((res) => {
+        setToken(res);
+      })
+      .catch((error) => console.log(error));
+  
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  
+    const request = {
+      dateRelease: dateRelease,
+      user: item.user,
+      requestId: item.id,
+    };
+    console.log("Date release", dateRelease);
+    axios
+      .put(`${baseURL}requests/requestSchedule`, request, config)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          console.log("Schedule edited successfully");
+          Toast.show({
+            topOffset: 60,
+            type: "success",
+            text1: "Schedule edited Succesfully",
+            text2: "",
+          });
+          setDateRelease(""); // Clear the date
+          setTimeout(() => {
+            console.log("Navigating to Request screen");
+            navigation.navigate("Documents");
+          }, 500);
+        }
+      })
+      .catch((error) => {
+        console.log("Error editing request:", error);
+        Toast.show({
+          topOffset: 60,
+          type: "error",
+          text1: "Something went wrong",
+          text2: "Please try again",
+        });
+      });
+  };
+  
+  
 
   // Function to update the request
   const updateRequest = () => {
@@ -69,9 +163,6 @@ const RequestCard = ({ item }) => {
       document: item.document,
       purpose: item.purpose,
       paymentInfo: item.paymentInfo,
-      gcashAccNumber: item.gcashAccNumber,
-      gcashAccName: item.gcashAccName,
-      gcashAmount: item.gcashAmount,
       HasPaid: item.HasPaid,
     };
 
@@ -221,6 +312,16 @@ const RequestCard = ({ item }) => {
                 </Text>
               </View>
             ))}
+            {item && (
+              <View className="flex flex-row">
+                <Text className="text-base">Date Schedule:</Text>
+                <Text className="text-zinc-700 text-right w-7/12 text-base">
+                  {item.dateRelease
+                    ? format(new Date(item.dateRelease), "MMMM dd, yyyy")
+                    : "No Schedule"}
+                </Text>
+              </View>
+            )}
           </View>
 
           <View className="flex flex-row">
@@ -250,16 +351,46 @@ const RequestCard = ({ item }) => {
               ))}
             </Select>
           </FormControl>
-          <View className="items-center pt-4">
+          <View className="flex-row space-x-2 pt-4">
             <TouchableOpacity
               onPress={() => updateRequest()}
               className="py-3 bg-[#FAE500] rounded-xl w-28 h-12"
             >
               <Text className="text-base font-bold text-center text-gray-700">
-                Update
+                Update Status
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              large
+              primary
+              onPress={() => SetRequestSchedule()}
+              className="py-3 bg-[#FAE500] rounded-xl w-44 h-12"
+            >
+              <Text className="text-base font-bold text-center text-gray-700">
+                Select date of release
               </Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity className="pt-4">
+            <View className="pl-4 flex flex-row space-x-4 items-center">
+              <CalendarDaysIcon
+                onPress={() => showDatePicker("start")}
+                name="calendar-alt"
+                size={45}
+                color={COLORS.versatilegray}
+              />
+              <Text className="text-base font-normal">
+                {dateRelease ? new Date(dateRelease).toLocaleString() : ""}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <DateTimePickerModal
+            isVisible={isStartDatePickerVisible}
+            mode="datetime"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
         </View>
       </View>
     </View>

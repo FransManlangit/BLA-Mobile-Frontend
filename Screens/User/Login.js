@@ -63,10 +63,10 @@ const Login = (props) => {
       // Navigate based on user role after successful login
       switch (context.stateUser.user.role) {
         case "guidance":
-          navigation.navigate("GuidanceNavigator");
+          navigation.navigate("GuidanceProfile");
           break;
         case "cashier":
-          navigation.navigate("CashierNavigator");
+          navigation.navigate("CashierProfile");
           break;
         default:
           navigation.navigate("User Profile");

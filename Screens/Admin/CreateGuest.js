@@ -14,13 +14,10 @@ import Toast from "react-native-toast-message";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 
-const CreateStudent = ({ navigation }) => {
+const CreateGuest = ({ navigation }) => {
   const [lastname, setLastName] = useState("");
   const [firstname, setFirstName] = useState("");
   const [middlename, setMiddleName] = useState("");
-  const [grade, setGrade] = useState("");
-  const [schoolId, setSchoolId] = useState("");
-  const [schoolYear, setSchoolYear] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState("");
@@ -32,10 +29,7 @@ const CreateStudent = ({ navigation }) => {
     if (!firstname) errors.firstname = "First Name is Required";
     if (!lastname) errors.lastname = "Last Name is Required";
     if (!middlename) errors.middlename = "Middle Name is Required";
-    if (!grade) errors.grade = "Grade Name is Required";
     if (!phone) errors.phone = "Mobile Number is Required ";
-    if (!schoolId) errors.schoolId = "Your School ID is Required";
-    if (!schoolYear) errors.schoolYear = "School Year is Required";
     if (!email) errors.email = "Email is Required";
     if (!password) errors.password = "Password is Required";
 
@@ -52,9 +46,6 @@ const CreateStudent = ({ navigation }) => {
       firstname === "" ||
       lastname === "" ||
       middlename === "" ||
-      grade === "" ||
-      schoolId === "" ||
-      schoolYear === "" ||
       phone === "" ||
       password === ""
     ) {
@@ -65,9 +56,6 @@ const CreateStudent = ({ navigation }) => {
       firstname: firstname,
       lastname: lastname,
       middlename: middlename,
-      grade: grade,
-      schoolId: schoolId,
-      schoolYear: schoolYear,
       email: email,
       password: password,
       phone: phone,
@@ -77,7 +65,7 @@ const CreateStudent = ({ navigation }) => {
     console.log("User", user);
 
     axios
-      .post(`${baseURL}users/student`, user)
+      .post(`${baseURL}users/alumni`, user)
       .then((res) => {
         if (res.status === 201) {
           // Change the condition to 201
@@ -206,21 +194,7 @@ const CreateStudent = ({ navigation }) => {
                   <Text className="text-red-500">{errors.middlename}</Text>
                 ) : null}
               </Text>
-              <Text className="text-gray-700 ml-4">Grade</Text>
-              <TextInput
-                className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-                placeholder="grade"
-                name={"grade"}
-                id={"grade"}
-                value={grade}
-                onChangeText={(text) => setGrade(text)}
-                placeholderTextColor={"black"}
-              />
-              <Text className="font-bold text-justify">
-                {errors.grade ? (
-                  <Text className="text-red-500">{errors.grade}</Text>
-                ) : null}
-              </Text>
+
               <Text className="text-gray-700 ml-4">Mobile Number</Text>
               <TextInput
                 className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
@@ -237,37 +211,7 @@ const CreateStudent = ({ navigation }) => {
                   <Text className="text-red-500">{errors.phone}</Text>
                 ) : null}
               </Text>
-              <Text className="text-gray-700 ml-4">School ID</Text>
-              <TextInput
-                className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-                placeholder="school id"
-                name={"schoolId"}
-                id={"schoolId"}
-                value={schoolId}
-                keyboardType={"numeric"}
-                onChangeText={(text) => setSchoolId(text.toLowerCase())}
-                placeholderTextColor={"black"}
-              />
-              <Text className="font-bold text-justify">
-                {errors.schoolId ? (
-                  <Text className="text-red-500">{errors.schoolId}</Text>
-                ) : null}
-              </Text>
-              <Text className="text-gray-700 ml-4">School Year</Text>
-              <TextInput
-                className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-                placeholder="school year"
-                name={"schoolYear"}
-                id={"schoolYear"}
-                value={schoolYear}
-                onChangeText={(text) => setSchoolYear(text)}
-                placeholderTextColor={"black"}
-              />
-              <Text className="font-bold text-justify">
-                {errors.schoolYear ? (
-                  <Text className="text-red-500">{errors.schoolYear}</Text>
-                ) : null}
-              </Text>
+
               <Text className="text-gray-700 ml-4">Email Address</Text>
               <TextInput
                 className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
@@ -315,4 +259,4 @@ const CreateStudent = ({ navigation }) => {
   );
 };
 
-export default CreateStudent;
+export default CreateGuest;

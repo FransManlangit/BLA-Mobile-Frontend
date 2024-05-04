@@ -11,7 +11,7 @@ import axios from "axios";
 import baseURL from "../assets/common/baseUrl";
 import AuthGlobal from "../Context/Store/AuthGlobal";
 import React, { useContext, useState, useEffect } from "react";
-
+import Login from "../Screens/User/Login";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,11 +42,20 @@ const CashierNavigator = (props) => {
   }, [stateUser.isAuthenticated, stateUser.user.userId]);
   return (
     <Stack.Navigator
-      initialRouteName="Cashier Profile"
+      initialRouteName="CashierProfile"
       screenOptions={{
         headerShown: false,
       }}
     >
+
+     <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerShown: false,
+        }}
+      />
+
       <Stack.Screen
         name="Students"
         component={Students}
@@ -73,7 +82,7 @@ const CashierNavigator = (props) => {
       />
 
       <Stack.Screen
-        name="Cashier Profile"
+        name="CashierProfile"
         component={CashierProfile}
         options={{
           headerShown: false,

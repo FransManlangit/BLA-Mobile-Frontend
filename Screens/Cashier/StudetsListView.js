@@ -89,7 +89,7 @@ const StudentsListView = ({ item, index, deleteUserBalance}) => {
               <Text className="text-base w-28">{item.user.grade}</Text>
               <Text className="text-base w-28">{item.user.role}</Text>
               <Text className="text-base w-28">{item.specificBalance}</Text>
-              <Text className="text-base w-28">{item.amount}</Text>
+              <Text className="text-base w-28">₱ {item.amount}</Text>
               </View>
               </View>
             </ScrollView>
