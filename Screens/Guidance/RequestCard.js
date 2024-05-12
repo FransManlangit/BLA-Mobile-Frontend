@@ -42,6 +42,112 @@ const RequestCard = ({ item }) => {
 
 
 // GAWA NI JEM
+// const updateRequest = async () => {
+//   try {
+//     // Retrieve token using async storage
+//     const token = await AsyncStorage.getItem("jwt");
+//     setToken(token);
+
+//     // Define request configuration
+//     const config = {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     };
+
+//     const requestData = {
+//       dateofRequest: item.dateofRequest,
+//       paidAt: item.paidAt,
+//       id: item.id,
+//       requestItems: item.requestItems,
+//       requestStatus: requestStatusChange,
+//       totalPrice: item.totalPrice,
+//       user: item.user,
+//       document: item.document,
+//       purpose: item.purpose,
+//       paymentInfo: item.paymentInfo,
+//     };
+
+//     // Check if the request status is being updated to "Approved by Guidance"
+//     if (requestStatusChange === "Approved by Guidance") {
+//       // Fetch user violations
+//       const violationsResponse = await axios.get(`${baseURL}violations`);
+//       const violations = violationsResponse.data;
+
+//       // Check if any violation exists for the user
+//       if (violations && violations.length > 0) {
+//         // Find the user's violations
+//         const userViolations = violations.find(
+//           (violation) => violation.user._id === item.user._id
+//         );
+//         console.log("AAAAA",  userViolations)
+       
+//         if (userViolations && userViolations.status === "With Violation") {
+//           Toast.show({
+//             type: "info",
+//             text1: `Cannot update status. Student ${item.user.lastname} has a violation.`,
+//           });
+//           return;
+//         }
+//         //old code
+//         // if (userViolations.status === "With Violation") {
+//         //   Toast.show({
+//         //     type: "info",
+//         //     text1: `Cannot update status. Student ${item.user.lastname} has a violation.`,
+//         //   });
+//         //   return;
+//         // }
+
+//         // Check if the user has a violation with status "Community Service" or "Parent Meeting"
+//         const hasCommunityServiceViolation = userViolations.violationLogs.some(
+//           (log) =>
+//             log.status === "Community Service" || log.status === "Parent Meeting"
+//         );
+
+//         // If there's a violation with status "Community Service" or "Parent Meeting", allow status update
+//         if (hasCommunityServiceViolation) {
+//           // Proceed with updating the request
+//           const updatedResponse = await axios.put(
+//             `${baseURL}requests/${item.id}`,
+//             requestData,
+//             config
+//           );
+
+//           if (updatedResponse.status === 200 || updatedResponse.status === 201) {
+//             Toast.show({
+//               type: "success",
+//               text1: "Request Updated Successfully",
+//             });
+//             navigation.navigate("GuidanceProfile");
+//           }
+//           return;
+//         }
+//       }
+//     }
+//     // Proceed with updating the request if the status change is not "Approved by Guidance"
+//     const updatedResponse = await axios.put(
+//       `${baseURL}requests/${item.id}`,
+//       requestData,
+//       config
+//     );
+
+//     if (updatedResponse.status === 200 || updatedResponse.status === 201) {
+//       Toast.show({
+//         type: "success",
+//         text1: "Request Updated Successfully",
+//       });
+//       navigation.navigate("GuidanceProfile");
+//     }
+//   } catch (error) {
+//     Toast.show({
+//       type: "error",
+//       text1: "Something Went Wrong",
+//       text2: "Please Try Again",
+//     });
+//     console.error("Update Request Failed:", error);
+//   }
+// };
+
 const updateRequest = async () => {
   try {
     // Retrieve token using async storage
@@ -74,49 +180,39 @@ const updateRequest = async () => {
       const violationsResponse = await axios.get(`${baseURL}violations`);
       const violations = violationsResponse.data;
 
+      console.log("Violation", violations);
+
       // Check if any violation exists for the user
       if (violations && violations.length > 0) {
         // Find the user's violations
-        const userViolations = violations.find(
+        const userViolations = violations.filter(
           (violation) => violation.user._id === item.user._id
         );
-        console.log("AAAAA",  userViolations)
-       
-        if (userViolations.status === "With Violation") {
-          Toast.show({
-            type: "info",
-            text1: `Cannot update status. Student ${item.user.lastname} has a violation.`,
-          });
-          return;
-        }
 
-        // Check if the user has a violation with status "Community Service" or "Parent Meeting"
-        const hasCommunityServiceViolation = userViolations.violationLogs.some(
-          (log) =>
-            log.status === "Community Service" || log.status === "Parent Meeting"
+        console.log("USERVIOLATIONS", userViolations);
+
+        // Check if the user has a violation with status "With Violation"
+        const hasViolationWithStatus = userViolations.some(
+          (violation) => violation.status === "With Violation"
         );
 
-        // If there's a violation with status "Community Service" or "Parent Meeting", allow status update
-        if (hasCommunityServiceViolation) {
-          // Proceed with updating the request
-          const updatedResponse = await axios.put(
-            `${baseURL}requests/${item.id}`,
-            requestData,
-            config
-          );
-
-          if (updatedResponse.status === 200 || updatedResponse.status === 201) {
+        if (hasViolationWithStatus) {
+          // Allow status update to "Pending Violation" or "Pending Clearance"
+          if (
+            requestStatusChange !== "Pending Violation" &&
+            requestStatusChange !== "Pending Clearance"
+          ) {
             Toast.show({
-              type: "success",
-              text1: "Request Updated Successfully",
+              type: "info",
+              text1: `Cannot update status. Student ${item.user.lastname} has a violation.`,
             });
-            navigation.navigate("GuidanceProfile");
+            return;
           }
-          return;
         }
       }
     }
-    // Proceed with updating the request if the status change is not "Approved by Guidance"
+
+    // Proceed with updating the request
     const updatedResponse = await axios.put(
       `${baseURL}requests/${item.id}`,
       requestData,
@@ -139,6 +235,10 @@ const updateRequest = async () => {
     console.error("Update Request Failed:", error);
   }
 };
+
+
+
+
   
 
   useEffect(() => {
