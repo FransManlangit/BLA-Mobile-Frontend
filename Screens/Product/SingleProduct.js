@@ -62,8 +62,8 @@ const SingleProduct = ({ route, navigation }) => {
           <Image
             className="h-72 w-full"
             source={
-              item.images?.url
-                ? { uri: item.images?.url }
+              item.images[0]?.url
+                ? { uri: item.images[0]?.url }
                 : "https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png"
             }
           />

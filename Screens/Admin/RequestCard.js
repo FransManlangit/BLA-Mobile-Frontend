@@ -201,6 +201,14 @@ const RequestCard = ({ item }) => {
       setRequestStatus(<TrafficLight Approved />);
       setStatusText("Approved by Cashier");
       setCardColor("#BABF5E");
+    } else if (item.requestStatus === "Approved") {
+      setRequestStatus(<TrafficLight Approved/>);
+      setStatusText("Approved");
+      setCardColor("#BABF5E");
+    } else if (item.requestStatus === "Approved by Guidance") {
+      setRequestStatus(<TrafficLight Approved by Guidance/>);
+      setStatusText("Approved by Guidance");
+      setCardColor("#c6131b");
     } else if (item.requestStatus === "Declined") {
       setRequestStatus(<TrafficLight Declined />);
       setStatusText("Declined");

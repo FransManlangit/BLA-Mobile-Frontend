@@ -159,16 +159,19 @@ const Login = (props) => {
               >
                 <Text className="text-gray-700 mb-5">Forgot Password?</Text>
               </TouchableOpacity>
+              <View className="p-4 pt-10">
+            
               <TouchableOpacity
                 onPress={() => login()}
-                className="py-3 bg-[#FAE500] rounded-xl "
+                className="py-3 bg-[#FAE500] rounded-xl"
               >
                 <Text className="text-base font-semibold text-center text-gray-700">
                   Login
                 </Text>
               </TouchableOpacity>
             </View>
-            <Text className="text-lg text-gray-700 font-semibold text-center py-4">
+            </View>
+            {/* <Text className="text-lg text-gray-700 font-semibold text-center py-4">
               Or
             </Text>
             <View className="flex-row justify-center pb-2">
@@ -178,7 +181,7 @@ const Login = (props) => {
               <TouchableOpacity onPress={() => navigation.push("Register")}>
                 <Text className="font-semibold text-yellow-500"> Sign Up</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
         </View>
       </KeyboardAwareScrollView>
