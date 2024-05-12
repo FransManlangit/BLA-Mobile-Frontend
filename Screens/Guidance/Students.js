@@ -30,21 +30,34 @@ var { height, width } = Dimensions.get("window");
 
 const ListHeader = () => {
   return (
-    <View className="flex pt-2 p-2 flex-row space-x-6 items-center">
-      <Text className="text-base w-20">Last Name</Text>
-      <Text className="text-base w-32">Grade</Text>
-      <Text className="text-base w-36">Type of Violation</Text>
-      <Text className="text-base w-32">Description</Text>
-      <Text className="text-base w-24">Date</Text>
+    <View className="p-5 bg-[#FAE500] rounded-lg ">
+       <View className="flex flex-row justify-between ">
+       <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black w-20">LastName</Text>
+          </View>
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black w-16">Grade</Text>
+          </View>
+          
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black ">Type</Text>
+          </View>
+          
+          <View className="flex-1 justify-center items-start ">
+            <Text className="font-bold text-black">Date</Text>
+          </View>
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black">Status</Text>
+          </View>
+        </View>
+    
     </View>
   );
 };
 
 const Students = (props) => {
   const [violationList, setviolationList] = useState([]);
-  console.log(violationList, "fetch the student's with violation");
   const [userFilter, setUserFilter] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState();
   const [refreshing, setRefreshing] = useState(false);
@@ -128,14 +141,14 @@ const Students = (props) => {
 
   return (
     <SafeAreaView>
-      <View className="flex bg-white h-full w-full pt-12">
+      <View className="flex bg-white h-full w-full pt-6 p-2">
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           className="space-x-3"
         >
           <View className="flex flex-col">
-            <View className="flex-row justify-start">
+            <View className="flex-row ">
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 className="bg-[#FAE500] p-2 rounded-tr-2xl rounded-bl-2xl ml-4"

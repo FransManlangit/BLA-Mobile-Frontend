@@ -25,12 +25,13 @@ import {
   UserGroupIcon,
   CreditCardIcon,
   LockClosedIcon,
+  ClipboardDocumentListIcon
 } from "react-native-heroicons/solid";
 
 const UserProfile = () => {
   const context = useContext(AuthGlobal);
   const [userProfile, setUserProfile] = useState("");
-  const [requests, setRequests] = useState([]);
+  
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -55,6 +56,10 @@ const UserProfile = () => {
     navigation.navigate("ChangePassword", { request });
   };
 
+  const balancelogs = () => {
+    navigation.navigate("BalanceLogs", { });
+  };
+
 
   useFocusEffect(
     useCallback(() => {
@@ -77,17 +82,11 @@ const UserProfile = () => {
           })
           .catch((error) => console.log(error));
 
-        axios
-          .get(
-            `${baseURL}requests/requestItems/${context.stateUser.user.userId}`
-          )
-          .then((res) => setRequests(res.data))
-          .catch((error) => console.log(error));
       }
 
       return () => {
         setUserProfile("");
-        setRequests([]);
+       
       };
     }, [context.stateUser.isAuthenticated])
   );
@@ -145,6 +144,14 @@ const UserProfile = () => {
                 <View className="pl-4 flex flex-row space-x-1 items-center">
                   <CreditCardIcon size={45} color={COLORS.versatilegray} />
                   <Text className="font-semibold pl-4 ">Add Student's Balance</Text>
+                </View>
+              ) : null}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => balancelogs()}>
+              {context.stateUser.user.role === "cashier" ? (
+                <View className="pl-4 flex flex-row space-x-1 items-center">
+                  <ClipboardDocumentListIcon size={45} color={COLORS.versatilegray} />
+                  <Text className="font-semibold pl-4 ">Balance Logs</Text>
                 </View>
               ) : null}
             </TouchableOpacity>

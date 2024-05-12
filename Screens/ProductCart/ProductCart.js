@@ -69,8 +69,8 @@ const ProductCart = (props) => {
             size="sm"
             resizeMode="cover"
             source={
-              item.images?.url
-                ? { uri: item.images?.url }
+              item.images[0]?.url
+                ? { uri: item.images[0]?.url }
                 : "https://res.cloudinary.com/dn638duad/image/upload/v1698419194/Beige_and_Charcoal_Modern_Travel_Itinerary_A4_Document_v9fz8j.png"
             }
           />
@@ -78,7 +78,7 @@ const ProductCart = (props) => {
             <Text className="tracking-wider text-sm font-semibold subpixel-antialiased">
               {item.productName}
             </Text>
-            <Text className="font-normal">₱{item.price}</Text>
+            <Text className="font-normal">{"₱" + new Intl.NumberFormat("en-US").format(item.price)}</Text>
           </View>
         </HStack>
       </Box>
@@ -162,7 +162,7 @@ const ProductCart = (props) => {
                   Total
                 </Text>
                 <Text className="text-lg font-medium text-black">
-                  ₱ {total.toFixed(2)}
+                {'₱' + new Intl.NumberFormat('en-US').format(total.toFixed(2))}
                 </Text>
               </View>
             </View>
@@ -182,7 +182,7 @@ const ProductCart = (props) => {
             }}
           >
             <Text className="font-medium text-black tracking-wide">
-              ORDER {total.toFixed(2)}
+              ORDER
             </Text>
           </TouchableOpacity>
         </View>

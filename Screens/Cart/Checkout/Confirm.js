@@ -86,7 +86,7 @@ const Confirm = (props) => {
               if (finalRequest.request.paymentInfo !== "Cash") {
                 Linking.openURL(checkoutUrl);
               }
-              
+
               setTimeout(() => {
                 dispatch(actions.clearCartDocument());
                 navigation.navigate("Cart");
@@ -147,15 +147,18 @@ const Confirm = (props) => {
                         }
                       />
                     </View>
-                    <VStack>
-                      <Text className="text-sm font-normal text-center">
+
+                    <View className="flex-col flex-1 space-y-2">
+                      <View className="flex-row">
+                      <Text className="text-sm font-normal text-center pr-4">
                         {item.name}
                       </Text>
-                    </VStack>
-                    <Spacer />
-                    <Text className="text-base font-normal text-center">
-                      {item.price}
-                    </Text>
+
+                      <Text className="text-base font-normal text-center pr-4">
+                        {item.price}
+                      </Text>
+                      </View>
+                    </View>
                   </HStack>
                 </View>
               );

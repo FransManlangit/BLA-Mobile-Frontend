@@ -31,12 +31,26 @@ var { height, width } = Dimensions.get("window");
 
 const ListHeader = () => {
   return (
-    <View className="flex pt-2 p-2 flex-row space-x-6 items-center">
-      <Text className="text-base w-24">Authorization</Text>
-      <Text className="text-base w-24">Last Name</Text>
-      <Text className="text-base w-24">Grade</Text>
-      <Text className="text-base w-28">Date Uploaded</Text>
-    </View>
+    <View className="p-5 bg-[#FAE500] rounded-lg ">
+    <View className="flex flex-row justify-between ">
+    <View className="flex-1 justify-center items-start">
+         <Text className="font-bold text-black w-28 text-center">Authorization Letter</Text>
+       </View>
+       <View className="flex-1 justify-center items-start">
+         <Text className="font-bold text-black w-16">Students</Text>
+       </View>
+       
+       <View className="flex-1 justify-center items-start">
+         <Text className="font-bold text-black ">Grade</Text>
+       </View>
+       
+       <View className="flex-1 justify-center items-start ">
+         <Text className="font-bold text-black">Date Uploaded</Text>
+       </View>
+      
+     </View>
+ 
+ </View>
   );
 };
 
@@ -125,7 +139,7 @@ const Authorization = (props) => {
 
   return (
     <SafeAreaView>
-      <View className="flex bg-white h-full w-full pt-12">
+      <View className="flex bg-white h-full w-full pt-6 p-2">
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}

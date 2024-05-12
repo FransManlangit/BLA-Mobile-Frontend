@@ -12,48 +12,50 @@ import EasyButton from "../../Shared/StyledComponents/EasyButtons";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "native-base";
 
-
 var { width } = Dimensions.get("window");
 
-const StudentsListView = ({ item, index, deleteUserBalance}) => {
-    const [modalVisible, setModalVisible] = useState(false);
-    let navigation = useNavigation();
-  
-    return (
-     
-      <View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(false);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <TouchableOpacity
-                onPress={() => {
+const StudentsListView = ({ item, index, deleteUserBalance }) => {
+  console.log("Item:", item);
+  const [modalVisible, setModalVisible] = useState(false);
+  let navigation = useNavigation();
+
+  return (
+    <View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+        
+          <View style={styles.modalView}>
+          <Text className="font-bold text-zinc-400 text-lg">Insert the Payment of Student</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(false);
+              }}
+              style={styles.closeButton}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>
+            
+            <EasyButton
+              medium
+              secondary
+              onPress={() => {
+                if (item) {
+                  navigation.navigate("UpdateBalanceStatus", { item: item });
                   setModalVisible(false);
-                }}
-                style={styles.closeButton}
-              >
-                <Icon name="close" size={20} />
-              </TouchableOpacity>
-               <EasyButton
-                medium
-                secondary
-                onPress={() => {
-                  if (item) {
-                    navigation.navigate("Balance", { user: item });
-                    setModalVisible(false);
-                  }
-                }}
-                title="Edit"
-              >
-                <Text style={styles.textStyle}>Edit</Text>
-              </EasyButton> 
-              <EasyButton
+                }
+              }}
+              title="Edit"
+            >
+              <Text style={styles.textStyle}>Update</Text>
+            </EasyButton>
+            {/* <EasyButton
                 medium
                 danger
                 onPress={() => {
@@ -65,86 +67,114 @@ const StudentsListView = ({ item, index, deleteUserBalance}) => {
                 title="Delete"
               >
                 <Text style={styles.textStyle}>Delete</Text>
-              </EasyButton>
-            </View>
+              </EasyButton> */}
           </View>
-        </Modal>
-        <TouchableOpacity
-          onPress={() => {
-            if (item) {
-              navigation.navigate("", { user: item });
-            }
-          }}
-          onLongPress={() => setModalVisible(true)}
-        >
-          {item ? (
-            <View>
-            <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            >
-              <View className="rounded-lg h-9">
-              <View className="flex p-2 flex-row space-x-6 items-center">
-              <Text className="text-base w-24">{item.user.lastname}</Text>
-              <Text className="text-base w-28">{item.user.grade}</Text>
-              <Text className="text-base w-28">{item.user.role}</Text>
-              <Text className="text-base w-28">{item.specificBalance}</Text>
-              <Text className="text-base w-28">₱ {item.amount}</Text>
-              </View>
+        </View>
+      </Modal>
+      <TouchableOpacity
+        onPress={() => {
+          if (item) {
+            navigation.navigate("", { user: item });
+          }
+        }}
+        onLongPress={() => setModalVisible(true)}
+      >
+        {item ? (
+          <View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View className="flex flex-row justify-between">
+                <View className="flex p-2 flex-row space-x-6 items-center">
+                  <View className="flex-1 justify-center items-start">
+                    <Text className="font-semibold text-base w-20">
+                      {item.user.lastname}
+                    </Text>
+                  </View>
+                  <View className="flex-1 justify-center items-start ">
+                    <Text className="font-semibold text-base w-32">
+                      {item.user.grade}
+                    </Text>
+                  </View>
+                  <View className="flex-1 justify-center items-start">
+                    <Text className="font-semibold text-base w-18">
+                      {item.user.role}
+                    </Text>
+                  </View>
+                  <View className="flex-1 justify-center items-start">
+                    <Text className="font-semibold text-base w-28">
+                      {item.specificBalance}
+                    </Text>
+                  </View>
+                  <View className="flex-1 justify-center items-start">
+                    <Text className="text-s font-semibold p-2 w-18">
+                      {"₱" + new Intl.NumberFormat("en-US").format(item.amount)}
+                    </Text>
+                  </View>
+
+                  <View className="flex-1 justify-center items-start ">
+                    <View
+                      className={`px-3 rounded-full ${
+                        item.status === "Settled"
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      }`}
+                    >
+                      <Text className="text-white font-semibold text-base">
+                        {item.status}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
               </View>
             </ScrollView>
-            </View>
-          ) : null}
-        </TouchableOpacity>
-      </View>
-    
-    );
-  };
-  
-  const styles = StyleSheet.create({
-    container: {
-      flexDirection: "row",
-      padding: 5,
-      width: width,
-    },
-    item: {
-      flexWrap: "wrap",
-      margin: 3,
-      width: width / 4,
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22,
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor: "white",
-      borderRadius: 20,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#58595B ",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-    },
-    closeButton: {
-      alignSelf: "flex-end",
-      position: "absolute",
-      top: 5,
-      right: 10,
-    },
-    textStyle: {
-      color: "white",
-      fontWeight: "bold",
-    },
-  });
-  
+          </View>
+        ) : null}
+      </TouchableOpacity>
+    </View>
+  );
+};
 
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    padding: 5,
+    width: width,
+  },
+  item: {
+    flexWrap: "wrap",
+    margin: 3,
+    width: width / 4,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#58595B ",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  closeButton: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    top: 5,
+    right: 10,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+  },
+});
 
 export default StudentsListView;

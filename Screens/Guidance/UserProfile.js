@@ -16,12 +16,7 @@ import AuthGlobal from "../../Context/Store/AuthGlobal";
 import { logoutUser } from "../../Context/Actions/Auth.actions";
 import { COLORS, SIZES } from "../../assets/constants";
 import { useSelector, useDispatch } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import Header from "../../Shared/Header";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   PencilSquareIcon,
@@ -30,13 +25,14 @@ import {
   UserGroupIcon,
   ShieldExclamationIcon,
   ListBulletIcon,
+  LockClosedIcon,
+  ClipboardDocumentListIcon,
 } from "react-native-heroicons/solid";
 import Clearance from "./Clearance";
 
 const UserProfile = () => {
   const context = useContext(AuthGlobal);
   const [userProfile, setUserProfile] = useState("");
-  const [requests, setRequests] = useState([]);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -61,6 +57,15 @@ const UserProfile = () => {
     navigation.navigate("Clearance", { request });
   };
 
+  
+  const changepassword = (request) => {
+    navigation.navigate("ChangePassword", { request });
+  };
+
+  const violationlogs = () => {
+    navigation.navigate("ViolationLogs", { });
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (
@@ -81,18 +86,10 @@ const UserProfile = () => {
               .catch((error) => console.log(error));
           })
           .catch((error) => console.log(error));
-
-        axios
-          .get(
-            `${baseURL}requests/requestItems/${context.stateUser.user.userId}`
-          )
-          .then((res) => setRequests(res.data))
-          .catch((error) => console.log(error));
       }
 
       return () => {
         setUserProfile("");
-        setRequests([]);
       };
     }, [context.stateUser.isAuthenticated])
   );
@@ -169,6 +166,20 @@ const UserProfile = () => {
                 </View>
               )}
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => violationlogs()}>
+              {context.stateUser.user.role === "guidance" ? (
+                <View className="pl-4 flex flex-row space-x-1 items-center">
+                  <ClipboardDocumentListIcon size={45} color={COLORS.versatilegray} />
+                  <Text className="font-semibold pl-4 ">Violation Logs</Text>
+                </View>
+              ) : null}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => changepassword()}>
+                <View className="pl-4 flex flex-row space-x-1 items-center">
+                  <LockClosedIcon size={45} color={COLORS.versatilegray} />
+                  <Text className="font-semibold pl-4 ">Change Password</Text>
+                </View>
+              </TouchableOpacity>
             <TouchableOpacity onPress={() => handleEditPress()}>
               <View className="pl-4 flex flex-row space-x-1 items-center">
                 <PencilSquareIcon size={45} color={COLORS.versatilegray} />

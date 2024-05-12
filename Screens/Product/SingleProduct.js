@@ -75,7 +75,7 @@ const SingleProduct = ({ route, navigation }) => {
             </Heading>
             <View className="space-y-6 pt-4 text-start">
               <Text className="text-base font-semibold tracking-wide">
-                ₱ {item.price}
+              {"₱" + new Intl.NumberFormat("en-US").format(item.price)}
               </Text>
               {item.description && (
                 <Text className="tracking-widest">{item.description}</Text>

@@ -25,8 +25,9 @@ import { useNavigation } from "@react-navigation/native";
 
 // Define status codes
 const codes = [
-  { name: "Approved", code: "Approved" },
+  { name: "Approved by Guidance", code: "Approved by Guidance" },
   { name: "Pending Violation", code: "Pending Violation" },
+  { name: "Pending Clearance", code: "Pending Clearance" },
 ];
 
 const RequestCard = ({ item }) => {
@@ -38,13 +39,14 @@ const RequestCard = ({ item }) => {
   const navigation = useNavigation();
 
   // Function to update the request
-  const updateRequest = async () => {
+
+
+// GAWA NI JEM
+const updateRequest = async () => {
+  try {
     // Retrieve token using async storage
-    AsyncStorage.getItem("jwt")
-      .then((res) => {
-        setToken(res);
-      })
-      .catch((error) => console.log(error));
+    const token = await AsyncStorage.getItem("jwt");
+    setToken(token);
 
     // Define request configuration
     const config = {
@@ -53,7 +55,6 @@ const RequestCard = ({ item }) => {
       },
     };
 
-    // Prepare request data
     const requestData = {
       dateofRequest: item.dateofRequest,
       paidAt: item.paidAt,
@@ -67,52 +68,90 @@ const RequestCard = ({ item }) => {
       paymentInfo: item.paymentInfo,
     };
 
-    // Make the PUT request to update the request
-    try {
-      // Check if status is "Approved"
-      if (requestStatusChange === "Approved") {
-        const violationsResponse = await axios.get(`${baseURL}violations`);
-        const violations = violationsResponse.data;
+    // Check if the request status is being updated to "Approved by Guidance"
+    if (requestStatusChange === "Approved by Guidance") {
+      // Fetch user violations
+      const violationsResponse = await axios.get(`${baseURL}violations`);
+      const violations = violationsResponse.data;
 
-        const studentHasViolation = violations.some(
+      // Check if any violation exists for the user
+      if (violations && violations.length > 0) {
+        // Find the user's violations
+        const userViolations = violations.find(
           (violation) => violation.user._id === item.user._id
         );
-        if (studentHasViolation) {
+        console.log("AAAAA",  userViolations)
+       
+        if (userViolations.status === "With Violation") {
           Toast.show({
             type: "info",
-            text1: `Attention: Student ${item.user.lastname} has a Violation.`,
+            text1: `Cannot update status. Student ${item.user.lastname} has a violation.`,
           });
           return;
         }
-      }
 
-      // Proceed with updating the request if no balance found
-      const updatedResponse = await axios.put(
-        `${baseURL}requests/${item.id}`,
-        requestData,
-        config
-      );
+        // Check if the user has a violation with status "Community Service" or "Parent Meeting"
+        const hasCommunityServiceViolation = userViolations.violationLogs.some(
+          (log) =>
+            log.status === "Community Service" || log.status === "Parent Meeting"
+        );
 
-      if (updatedResponse.status === 200 || updatedResponse.status === 201) {
-        Toast.show({
-          type: "success",
-          text1: "Request Updated Successfully",
-        });
-        navigation.navigate("GuidanceProfile");
+        // If there's a violation with status "Community Service" or "Parent Meeting", allow status update
+        if (hasCommunityServiceViolation) {
+          // Proceed with updating the request
+          const updatedResponse = await axios.put(
+            `${baseURL}requests/${item.id}`,
+            requestData,
+            config
+          );
+
+          if (updatedResponse.status === 200 || updatedResponse.status === 201) {
+            Toast.show({
+              type: "success",
+              text1: "Request Updated Successfully",
+            });
+            navigation.navigate("GuidanceProfile");
+          }
+          return;
+        }
       }
-    } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "Something Went Wrong",
-        text2: "Please Try Again",
-      });
-      console.error("Update Request Failed:", error);
     }
-  };
+    // Proceed with updating the request if the status change is not "Approved by Guidance"
+    const updatedResponse = await axios.put(
+      `${baseURL}requests/${item.id}`,
+      requestData,
+      config
+    );
+
+    if (updatedResponse.status === 200 || updatedResponse.status === 201) {
+      Toast.show({
+        type: "success",
+        text1: "Request Updated Successfully",
+      });
+      navigation.navigate("GuidanceProfile");
+    }
+  } catch (error) {
+    Toast.show({
+      type: "error",
+      text1: "Something Went Wrong",
+      text2: "Please Try Again",
+    });
+    console.error("Update Request Failed:", error);
+  }
+};
+  
 
   useEffect(() => {
     // Set request status and card color based on item status
-    if (item.requestStatus === "Approved") {
+    if (item.requestStatus === "Approved by Guidance") {
+      setRequestStatus(<TrafficLight Approved by Guidance />);
+      setStatusText("Approved by Guidance");
+      setCardColor("#BABF5E");
+    } else if (item.requestStatus === "Approved by Cashier") {
+      setRequestStatus(<TrafficLight Approved by Cashier />);
+      setStatusText("Approved by Cashier");
+      setCardColor("#BABF5E");
+    } else if (item.requestStatus === "Approved") {
       setRequestStatus(<TrafficLight Approved />);
       setStatusText("Approved");
       setCardColor("#BABF5E");
@@ -121,16 +160,20 @@ const RequestCard = ({ item }) => {
       setStatusText("Declined");
       setCardColor("#c6131b");
     } else if (item.requestStatus === "Received") {
-      setRequestStatus(<TrafficLight received />);
+      setRequestStatus(<TrafficLight Received />);
       setStatusText("Received");
       setCardColor("#006899");
     } else if (item.requestStatus === "Pending Violation") {
       setRequestStatus(<TrafficLight Pending Violation />);
       setStatusText("Pending Violation");
       setCardColor("#c6131b");
-    } else if (item.requestStatus === "Setel your Balance") {
-      setRequestStatus(<TrafficLight Setel your Balance />);
-      setStatusText("Setel your Balance");
+    } else if (item.requestStatus === "Pending Clearance") {
+      setRequestStatus(<TrafficLight Pending Violation />);
+      setStatusText("Pending Clearance");
+      setCardColor("#c6131b");
+    } else if (item.requestStatus === "Settle your Balance") {
+      setRequestStatus(<TrafficLight Settle your Balance />);
+      setStatusText("Settle your Balance");
       setCardColor("#c6131b");
     }
 

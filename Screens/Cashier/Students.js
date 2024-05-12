@@ -26,16 +26,36 @@ import Toast from "react-native-toast-message";
 import { COLORS, SIZES } from "../../assets/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import { ChevronLeftIcon } from "react-native-heroicons/outline";
+import { COLOURS, Item } from "../../assets/database/Database";
+
 var { height, width } = Dimensions.get("window");
 
 const ListHeader = () => {
   return (
-    <View className="flex pt-2 p-2 flex-row space-x-6 items-center">
-      <Text className="text-base w-24">Last Name</Text>
-      <Text className="text-base w-28">Grade</Text>
-      <Text className="text-base w-28">Role</Text>
-      <Text className="text-base w-28">Students Balance</Text>
-      <Text className="text-base w-28">Amount</Text>
+    <View className="p-5 bg-[#FAE500] rounded-lg ">
+       <View className="flex flex-row justify-between">
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black w-20">Name</Text>
+          </View>
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black w-30">Grade</Text>
+          </View>
+    
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black w-18 ">Role</Text>
+          </View>
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black w-22">Description</Text>
+          </View>
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black w-18">Balance</Text>
+          </View>
+          <View className="flex-1 justify-center items-start">
+            <Text className="font-bold text-black w-18">Status</Text>
+          </View>
+        </View>
+      
      
     </View>
   );
@@ -43,9 +63,7 @@ const ListHeader = () => {
 
 const Students = (props) => {
   const [balanceList, setbalanceList] = useState([]);
-  console.log(balanceList, "fetch the data bro");
   const [userFilter, setUserFilter] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState();
   const [refreshing, setRefreshing] = useState(false);
@@ -130,24 +148,30 @@ const Students = (props) => {
 
   return (
     <SafeAreaView>
-      <View className="flex bg-white h-full w-full pt-12">
+      <View className="flex bg-white h-full w-full pt-4 p-2">
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           className="space-x-3"
         >
-          <View className="flex flex-col">
+          <View className="flex flex-col ">
             <View className="flex-row justify-start">
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                className="bg-[#FAE500] p-2 rounded-tr-2xl rounded-bl-2xl ml-4"
-              >
-                <ArrowLeftIcon size="20" color="black" />
-              </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon
+              name="chevron-left"
+              style={{
+                fontSize: 18,
+                color: COLOURS.backgroundDark,
+                padding: 12,
+                backgroundColor: COLOURS.backgroundLight,
+                borderRadius: 12,
+              }}
+            />
+          </TouchableOpacity>
             </View>
             <View className="p-4 pt-8 flex-row space-x-60">
             <Text className="text-base font-normal">Swipe Left to View More</Text>
-            <Text className="text-base font-normal">Long Press to delete</Text>
+            <Text className="text-base font-normal">Long Press to Edit</Text>
             </View>
             {loading ? (
               <View style={styles.spinner}>

@@ -30,11 +30,24 @@ var { height, width } = Dimensions.get("window");
 
 const ListHeader = () => {
   return (
-    <View className="flex pt-2 p-2 flex-row space-x-6 items-center">
-      <Text className="text-base w-20">Clearance</Text>
-      <Text className="text-base w-20">Last Name</Text>
-      <Text className="text-base w-32">Grade</Text>
-      <Text className="text-base w-28">Date Uploaded</Text>
+    <View className="p-4 bg-[#FAE500] rounded-lg flex-row ">
+       <View className="flex-1 justify-center ">
+      <View className="flex flex-row space-x-8">
+  
+            <Text className="font-bold text-black ">Clearance</Text>
+      
+      
+            <Text className="font-bold text-black ">Last Name</Text>
+    
+   
+            <Text className="font-bold text-black ">Grade</Text>
+     
+          
+            <Text className="font-bold text-black ">Date Uploaded</Text>
+        
+   
+      </View>
+      </View>
     </View>
   );
 };
@@ -124,7 +137,7 @@ const Clearance = (props) => {
 
   return (
     <SafeAreaView>
-      <View className="flex bg-white h-full w-full pt-12">
+      <View className="flex bg-white h-full w-full pt-6 p-2">
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -139,7 +152,7 @@ const Clearance = (props) => {
                 <ArrowLeftIcon size="20" color="black" />
               </TouchableOpacity>
             </View>
-            <View className="p-4 flex-row space-x-60">
+            <View className="p-4 flex-row space-x-20">
               <Text className="text-base font-normal">
                 Swipe Left to View More
               </Text>

@@ -168,10 +168,10 @@ const Login = (props) => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <Text className="text-lg text-gray-700 font-semibold text-center py-5">
+            <Text className="text-lg text-gray-700 font-semibold text-center py-4">
               Or
             </Text>
-            <View className="flex-row justify-center mt-4 pb-2">
+            <View className="flex-row justify-center pb-2">
               <Text className="text-gray-500 font-semibold">
                 Don't have an account?
               </Text>

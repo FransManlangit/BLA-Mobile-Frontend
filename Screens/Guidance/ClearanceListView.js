@@ -12,12 +12,12 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import EasyButton from "../../Shared/StyledComponents/EasyButtons";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "native-base";
-
+import { format } from "date-fns";
 
 var { width } = Dimensions.get("window");
 
 const ClearanceListView = ({ item, index, deleteUserClearance }) => {
- console.log("ITEMS", item)
+  console.log("ITEMS", item);
   const [modalVisible, setModalVisible] = useState(false);
   // console.log("Imgage", itemC);
   let navigation = useNavigation();
@@ -84,7 +84,7 @@ const ClearanceListView = ({ item, index, deleteUserClearance }) => {
         {item ? (
           <View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View className="rounded-lg h-9">
+              <View className="flex flex-row justify-between">
                 <View className="flex p-2 flex-row space-x-6 items-center">
                   <Image
                     source={
@@ -96,10 +96,22 @@ const ClearanceListView = ({ item, index, deleteUserClearance }) => {
                     style={styles.clearanceImages}
                   />
 
-                  <Text className="text-base w-20">{item.user.lastname}</Text>
-                  <Text className="text-base w-32">{item.user.grade}</Text>
+                  <View className="flex-1 justify-center items-start">
+                    <Text className="font-semibold text-base ">
+                      {item.user.lastname}
+                    </Text>
+                  </View>
+                  <View className="flex-1 justify-center items-start">
+                    <Text className="font-semibold text-base ">
+                      {item.user.grade}
+                    </Text>
+                  </View>
 
-                  <Text className="text-base w-28">{item.uploadedAt}</Text>
+                  <Text className="text-base font-normal">
+                    {item.uploadedAt
+                      ? new Date(item.uploadedAt).toLocaleDateString()
+                      : ""}
+                  </Text>
                 </View>
               </View>
             </ScrollView>

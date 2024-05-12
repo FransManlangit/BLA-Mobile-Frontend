@@ -15,6 +15,7 @@ import { ScrollView } from "native-base";
 var { width } = Dimensions.get("window");
 
 const StudentsListView = ({ item, index, deleteUserViolation }) => {
+  console.log("Item Dawwewerweerewrw", item);
   const [modalVisible, setModalVisible] = useState(false);
   let navigation = useNavigation();
 
@@ -29,7 +30,9 @@ const StudentsListView = ({ item, index, deleteUserViolation }) => {
         }}
       >
         <View style={styles.centeredView}>
+
           <View style={styles.modalView}>
+          <Text className="font-bold text-zinc-400 text-lg">Edit Student Violation</Text>
             <TouchableOpacity
               onPress={() => {
                 setModalVisible(false);
@@ -44,15 +47,16 @@ const StudentsListView = ({ item, index, deleteUserViolation }) => {
               secondary
               onPress={() => {
                 if (item) {
-                  navigation.navigate("Violation", { user: item });
+                  navigation.navigate("UpdateViolationStatus", { item: item });
+
                   setModalVisible(false);
                 }
               }}
               title="Edit"
             >
-              <Text style={styles.textStyle}>Edit</Text>
+              <Text style={styles.textStyle}>Update</Text>
             </EasyButton>
-            <EasyButton
+            {/* <EasyButton
               medium
               danger
               onPress={() => {
@@ -64,7 +68,7 @@ const StudentsListView = ({ item, index, deleteUserViolation }) => {
               title="Delete"
             >
               <Text style={styles.textStyle}>Delete</Text>
-            </EasyButton>
+            </EasyButton> */}
           </View>
         </View>
       </Modal>
@@ -80,19 +84,47 @@ const StudentsListView = ({ item, index, deleteUserViolation }) => {
         {item ? (
           <View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View className="rounded-lg  ">
+              <View className="flex flex-row justify-between">
                 <View className="flex p-2 flex-row space-x-6 items-center">
-                  <Text className="text-base w-20">{item.user.lastname}</Text>
-                  <Text className="text-base w-32">{item.user.grade}</Text>
-                  <Text className="text-base w-44">{item.type}</Text>
-                  <Text className="text-base w-44">{item.description}</Text>
+                  <View className="flex-1 justify-center items-start">
+                    <Text className="font-semibold text-base w-20">
+                      {item.user.lastname}
+                    </Text>
+                  </View>
+                  <View className="flex-1 justify-center items-start ">
+                    <Text className="font-semibold text-base w-32">
+                      {item.user.grade}
+                    </Text>
+                  </View>
+
+                  <View className="flex-1 justify-center items-start">
+                    <Text className="font-semibold text-base w-24">
+                      {item.type}
+                    </Text>
+                  </View>
+
                   {item.date ? (
-                    <Text className="text-base w-20">
+                    <Text className="text-base">
                       {new Date(item.date).toLocaleDateString("en-US")}
                     </Text>
                   ) : (
-                    <Text className="text-base w-20">N/A</Text>
+                    <Text className="text-base">N/A</Text>
                   )}
+
+                  <View className="flex-1 justify-center items-start ">
+                    <View
+                      className={`px-3 rounded-full ${
+                        item.status === "Community Service" ||
+                        item.status === "Parent Meeting"
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      }`}
+                    >
+                      <Text className="text-white font-semibold text-base">
+                        {item.status}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               </View>
             </ScrollView>

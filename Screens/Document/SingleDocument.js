@@ -72,7 +72,7 @@ const SingleDocument = ({ route, navigation }) => {
             <Heading className="text-2xl text-center">{item.name}</Heading>
             <View className="space-y-6 pt-4 text-start">
               <Text className="text-base font-semibold tracking-wide">
-                ₱ {item.price}
+              {"₱" + new Intl.NumberFormat("en-US").format(item.price)}
               </Text>
               <Text className="tracking-widest">{item.description}</Text>
             </View>

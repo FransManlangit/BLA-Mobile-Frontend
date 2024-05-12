@@ -8,6 +8,9 @@ import Requests from "../Screens/Guidance/Requests";
 import Clearance from "../Screens/Guidance/Clearance";
 import SingleClearance from "../Screens/Guidance/SingleClearance";
 import Login from "../Screens/User/Login";
+import UpdateViolationStatus from "../Screens/Guidance/UpdateViolationStatus";
+import ViolationLogs from "../Screens/Guidance/ViolationLogs";
+import ChangePassword from "../Screens/Guidance/ChangePassword";
 
 const Stack = createStackNavigator();
 
@@ -67,6 +70,28 @@ const GuidanceNavigator = (props) => {
       <Stack.Screen
         name="Clearance"
         component={Clearance}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="UpdateViolationStatus"
+        component={UpdateViolationStatus}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="ViolationLogs"
+        component={ViolationLogs}
+        options={{
+          headerShown: false,
+        }}
+      />
+        <Stack.Screen
+        name="ChangePassword"
+        component={ChangePassword}
         options={{
           headerShown: false,
         }}

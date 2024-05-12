@@ -8,6 +8,7 @@ import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
 import Toast from "react-native-toast-message";
 
+
 const ResetPasswordConfirmation = ({ route, navigation }) => {
   const { email } = route.params;
   const [newPassword, setNewPassword] = useState("");
@@ -18,6 +19,7 @@ const ResetPasswordConfirmation = ({ route, navigation }) => {
   const handleForgotPass = () => {
     navigation.navigate("ForgotPassword");
   };
+
 
   const handleResetPassword = async () => {
     try {
@@ -46,11 +48,24 @@ const ResetPasswordConfirmation = ({ route, navigation }) => {
         });
         navigation.navigate("Login");
       } else {
-        setError("There was an issue resetting your password. Please try again.");
+        if (response.data.message === "Invalid verification code.") {
+          Toast.show({
+            type: 'error',
+            text1: 'Invalid Verification Code',
+            text2: 'The verification code you entered is invalid.',
+          });
+        } else {
+          setError("There was an issue resetting your password. Please try again.");
+        }
       }
     } catch (error) {
       console.error(error);
       setError("An error occurred while resetting your password.");
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Verification Code',
+        text2: 'An error occurred while resetting your password.',
+      });
     }
   };
 
@@ -91,6 +106,7 @@ const ResetPasswordConfirmation = ({ route, navigation }) => {
                 value={verificationCode}
                 onChangeText={setVerificationCode}
                 placeholder="verification code"
+                keyboardType={"numeric"}
                 className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
               />
               <Text className="text-gray-700 ml-4">New Password</Text>

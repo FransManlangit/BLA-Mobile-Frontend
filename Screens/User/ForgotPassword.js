@@ -22,22 +22,49 @@ const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
+
+
   const handleResetPassword = async () => {
     try {
       if (!email.trim()) {
-        setError("Email is required.");
+        Toast.show({
+          type: 'error',
+          text1: 'Email Required',
+          text2: 'Please enter your email to reset your password.',
+        });
         return;
       }
   
       const response = await axios.post(`${baseURL}users/resetPassword`, { email });
       if (response.data.success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Reset Token Sent',
+          text2: 'Please check your email for the reset token.',
+        });
         navigation.navigate("ResetPass", { email });
       } else {
-        setError("There was an issue resetting your password. Please try again.");
+        if (response.data.message === "User not found") {
+          Toast.show({
+            type: 'error',
+            text1: 'User Not Found',
+            text2: 'The email you entered does not exist. Please try again.',
+          });
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'There was an issue resetting your password. Please try again later.',
+          });
+        }
       }
     } catch (error) {
       console.error(error);
-      setError("An error occurred while resetting your password.");
+      Toast.show({
+        type: 'error',
+        text1: 'Email is does not Exist',
+        text2: 'Check your email please, Please try again later.',
+      });
     }
   };
 

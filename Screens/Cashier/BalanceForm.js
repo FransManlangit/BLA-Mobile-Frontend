@@ -197,6 +197,7 @@ const BalanceForm = (props) => {
                   id="amount"
                   value={amount}
                   onChangeText={(text) => setAmount(text)}
+                  keyboardType={"number-pad"}
                 />
               </View>
             </View>

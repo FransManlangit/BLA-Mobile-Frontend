@@ -16,11 +16,8 @@ import {
   CheckIcon,
   Spacer,
 } from "native-base";
-import Icon from "react-native-vector-icons/FontAwesome";
 import TrafficLight from "../../Shared/StyledComponents/TrafficLight";
-import EasyButton from "../../Shared/StyledComponents/EasyButtons";
 import Toast from "react-native-toast-message";
-import { Ionicons, Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
@@ -28,8 +25,8 @@ import { useNavigation } from "@react-navigation/native";
 
 // Define status codes
 const codes = [
-  { name: "Approved", code: "Approved" },
-  { name: "Setel your Balance", code: "Setel your Balance" },
+  { name: "Approved by Cashier", code: "Approved by Cashier" },
+  { name: "Settle your Balance", code: "Settle your Balance" },
 ];
 
 const RequestCard = ({ item }) => {
@@ -40,60 +37,66 @@ const RequestCard = ({ item }) => {
   const [cardColor, setCardColor] = useState();
   const navigation = useNavigation();
 
-  // Function to update the request
   const updateRequest = async () => {
-    // Retrieve token using async storage
-    AsyncStorage.getItem("jwt")
-      .then((res) => {
-        setToken(res);
-      })
-      .catch((error) => console.log(error));
-  
-    // Define request configuration
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-  
-    // Prepare request data
-    const requestData = {
-      dateofRequest: item.dateofRequest,
-      paidAt: item.paidAt,
-      id: item.id,
-      requestItems: item.requestItems,
-      requestStatus: requestStatusChange,
-      totalPrice: item.totalPrice,
-      user: item.user,
-      document: item.document,
-      purpose: item.purpose,
-      paymentInfo: item.paymentInfo,
-    };
-  
-    // Make the PUT request to update the request
     try {
-      // Check if status is "Approved"
-      if (requestStatusChange === "Approved") {
+      // Retrieve token using async storage
+      const token = await AsyncStorage.getItem("jwt");
+
+      // Define request configuration
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Prepare request data
+      const requestData = {
+        dateofRequest: item.dateofRequest,
+        paidAt: item.paidAt,
+        id: item.id,
+        requestItems: item.requestItems,
+        requestStatus: requestStatusChange,
+        totalPrice: item.totalPrice,
+        user: item.user,
+        document: item.document,
+        purpose: item.purpose,
+        paymentInfo: item.paymentInfo,
+      };
+
+      // Check if the request status is being updated to "Approved by Cashier"
+      if (requestStatusChange === "Approved by Cashier") {
         // Fetch user balances
         const balancesResponse = await axios.get(`${baseURL}balances`);
         const balances = balancesResponse.data;
-  
+
         // Check if any balance exists for the user
         if (balances && balances.length > 0) {
-          const studentHasBalance = balances.some((balance) => balance.user._id === item.user._id);
-          if (studentHasBalance) {
+          // Find the user's balance record
+          const userBalance = balances.find(
+            (balance) => balance.user._id === item.user._id
+          );
+
+          // Check if the user has a balance record and the status is "Unsettled"
+          if (userBalance && userBalance.status === "Unsettled") {
+            // Display a message indicating that the status cannot be updated
             Toast.show({
               type: "info",
-              text1: `Attention: Student ${item.user.lastname} has a balance.`,
+              text1: `Cannot update status. Student ${item.user.lastname} has a balance.`,
             });
             return;
           }
         }
+
+        
       }
-  
-      // Proceed with updating the request if no balance found
-      const updatedResponse = await axios.put(`${baseURL}requests/${item.id}`, requestData, config);
-  
+
+      // Proceed with updating the request
+      const updatedResponse = await axios.put(
+        `${baseURL}requests/${item.id}`,
+        requestData,
+        config
+      );
+
       if (updatedResponse.status === 200 || updatedResponse.status === 201) {
         Toast.show({
           type: "success",
@@ -110,14 +113,19 @@ const RequestCard = ({ item }) => {
       console.error("Update Request Failed:", error);
     }
   };
-  
-  
-  
 
   useEffect(() => {
     // Set request status and card color based on item status
-    if (item.requestStatus === "Approved") {
-      setRequestStatus(<TrafficLight Approved />);
+    if (item.requestStatus === "Approved by Guidance") {
+      setRequestStatus(<TrafficLight Approved by Guidance />);
+      setStatusText("Approved by Guidance");
+      setCardColor("#BABF5E");
+    } else if (item.requestStatus === "Approved by Cashier") {
+      setRequestStatus(<TrafficLight Approved by Cashier />);
+      setStatusText("Approved by Cashier");
+      setCardColor("#BABF5E");
+    } else if (item.requestStatus === "Approved") {
+      setRequestStatus(<TrafficLight Approved/>);
       setStatusText("Approved");
       setCardColor("#BABF5E");
     } else if (item.requestStatus === "Declined") {
@@ -129,12 +137,16 @@ const RequestCard = ({ item }) => {
       setStatusText("Received");
       setCardColor("#006899");
     } else if (item.requestStatus === "Pending Violation") {
-      setRequestStatus(<TrafficLight Pending Violation/>);
+      setRequestStatus(<TrafficLight Pending Violation />);
       setStatusText("Pending Violation");
       setCardColor("#c6131b");
-    } else if (item.requestStatus === "Setel your Balance") {
-      setRequestStatus(<TrafficLight Setel your Balance/>);
-      setStatusText("Setel your Balance");
+    } else if (item.requestStatus === "Pending Clearance") {
+      setRequestStatus(<TrafficLight Pending Clearance />);
+      setStatusText("Pending Clearance");
+      setCardColor("#c6131b");
+    } else if (item.requestStatus === "Settle your Balance") {
+      setRequestStatus(<TrafficLight Settle your Balance />);
+      setStatusText("Settle your Balance");
       setCardColor("#c6131b");
     }
 
@@ -157,7 +169,7 @@ const RequestCard = ({ item }) => {
       setStatusText(null);
       setCardColor(null);
     };
-  }, []);
+  }, [item]); // <-- Include 'item' as a dependency
 
   return (
     <View style={[styles.container, { backgroundColor: cardColor }]}>
@@ -212,7 +224,6 @@ const RequestCard = ({ item }) => {
             {item.requestItems.map((requestItem, index) => (
               <View key={index} className="flex flex-row">
                 <Text className="text-base">{requestItem.document?.name}</Text>
-              
               </View>
             ))}
           </View>
@@ -239,7 +250,7 @@ const RequestCard = ({ item }) => {
           </FormControl>
           <View className="items-center pt-4">
             <TouchableOpacity
-             onPress={() => updateRequest()}
+              onPress={() => updateRequest()}
               className="py-3 bg-[#FAE500] rounded-xl w-28 h-12"
             >
               <Text className="text-base font-bold text-center text-gray-700">

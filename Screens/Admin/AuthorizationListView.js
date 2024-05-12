@@ -17,7 +17,17 @@ var { width } = Dimensions.get("window");
 
 const AuthorizationListView = ({ item, index, deleteUserAuthorization }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  let navigation = useNavigation();
+  const navigation = useNavigation();
+
+  const handleNavigation = () => {
+    try {
+      if (item) {
+        navigation.navigate("SingleAuthorization", { user: item });
+      }
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
+  };
 
   return (
     <View>
@@ -39,12 +49,12 @@ const AuthorizationListView = ({ item, index, deleteUserAuthorization }) => {
             >
               <Icon name="close" size={20} />
             </TouchableOpacity>
-
             <EasyButton
               medium
               secondary
               onPress={() => {
                 if (item) {
+                  // Modify the navigation destination as needed
                   navigation.navigate("Clearance", { user: item });
                   setModalVisible(false);
                 }
@@ -58,7 +68,7 @@ const AuthorizationListView = ({ item, index, deleteUserAuthorization }) => {
               danger
               onPress={() => {
                 if (item) {
-                  deleteUserClearance(item._id);
+                  deleteUserAuthorization(item._id);
                   setModalVisible(false);
                 }
               }}
@@ -69,21 +79,14 @@ const AuthorizationListView = ({ item, index, deleteUserAuthorization }) => {
           </View>
         </View>
       </Modal>
-
-      <TouchableOpacity
-        onPress={() => {
-          if (item) {
-            navigation.navigate("", { user: item });
-          }
-        }}
-        onLongPress={() => setModalVisible(true)}
-      >
+      <TouchableOpacity onPress={handleNavigation} onLongPress={() => setModalVisible(true)}>
         {item ? (
           <View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View className="rounded-lg h-9">
                 <View className="flex p-2 flex-row space-x-6 items-center">
                   <Image
+                  
                     source={
                       item &&
                       item.authorizationLetter &&
@@ -94,13 +97,17 @@ const AuthorizationListView = ({ item, index, deleteUserAuthorization }) => {
                     resizeMode="contain"
                     style={styles.authorizationLetter}
                   />
-                  <Text className="text-base pl-12 w-28">
-                    {item.user ? item.user.lastname : "N/A"}
-                  </Text>
-                  <Text className="text-base w-36 pl-4">
-                    {item.user ? item.user.grade : "N/A"}
-                  </Text>
-                  <Text className="text-base w-28">
+                   <View className="flex-1 justify-center items-start">
+                    <Text className="font-semibold text-base pl-20">
+                      {item.user.lastname}
+                    </Text>
+                  </View>
+                  <View className="flex-1 justify-center items-start ">
+                    <Text className="font-semibold text-base pl-10">
+                      {item.user.grade}
+                    </Text>
+                  </View>
+                  <Text className="text-base pl-11">
                     {item.dateofRequest
                       ? item.dateofRequest.split("T")[0]
                       : "N/A"}

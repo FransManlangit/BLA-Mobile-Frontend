@@ -75,7 +75,6 @@ const ListItem = ({ item, index, deleteDocument }) => {
           navigation.navigate("Document Detail", { item });
         }}
         onLongPress={() => setModalVisible(true)}
-        
       >
         <View className="bg-white p-2">
           <View className="flex pt-2 p-2 flex-row space-x-6 items-center">
@@ -89,12 +88,11 @@ const ListItem = ({ item, index, deleteDocument }) => {
               style={styles.image}
             />
             <Text className="text-sm w-36">{item.name}</Text>
-            <Text className="text-sm w-32">${item.price}</Text>
-          
+            <Text className="text-sm w-32">
+              {"₱" + new Intl.NumberFormat("en-US").format(item.price)}
+            </Text>
           </View>
         </View>
-
-        
       </TouchableOpacity>
     </View>
   );

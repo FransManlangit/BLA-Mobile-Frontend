@@ -180,7 +180,7 @@ const RequestCard = ({ item }) => {
             text2: "",
           });
           setTimeout(() => {
-            navigation.navigate("Requests");
+            navigation.navigate("Documents");
           }, 500);
         }
       })
@@ -197,9 +197,9 @@ const RequestCard = ({ item }) => {
 
   useEffect(() => {
     // Set request status and card color based on item status
-    if (item.requestStatus === "Approved") {
+    if (item.requestStatus === "Approved by Cashier") {
       setRequestStatus(<TrafficLight Approved />);
-      setStatusText("Approved");
+      setStatusText("Approved by Cashier");
       setCardColor("#BABF5E");
     } else if (item.requestStatus === "Declined") {
       setRequestStatus(<TrafficLight Declined />);
@@ -213,9 +213,13 @@ const RequestCard = ({ item }) => {
       setRequestStatus(<TrafficLight Pending Violation />);
       setStatusText("Pending Violation");
       setCardColor("#c6131b");
-    } else if (item.requestStatus === "Setel your Balance") {
-      setRequestStatus(<TrafficLight Setel your Balance />);
-      setStatusText("Setel your Balance");
+    } else if (item.requestStatus === "Pending Clearance") {
+      setRequestStatus(<TrafficLight Pending Violation />);
+      setStatusText("Pending Clearance");
+      setCardColor("#c6131b");
+    } else if (item.requestStatus === "Settle your Balance") {
+      setRequestStatus(<TrafficLight Settle your Balance />);
+      setStatusText("Settle your Balance");
       setCardColor("#c6131b");
     }
 
@@ -390,6 +394,7 @@ const RequestCard = ({ item }) => {
             mode="datetime"
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
+            minimumDate={new Date()}
           />
         </View>
       </View>

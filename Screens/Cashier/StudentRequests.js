@@ -181,7 +181,7 @@ const StudentRequests = (props) => {
           >
             <Select.Item label="Approved" value="Approved" />
             <Select.Item label="Pending" value="Pending" />
-            <Select.Item label="Setel your Balance" value="Setel your Balance" />
+            <Select.Item label="Settle your Balance" value="Settle your Balance" />
             {/* Add more Select.Item components for other statuses */}
           </Select>
         </View>

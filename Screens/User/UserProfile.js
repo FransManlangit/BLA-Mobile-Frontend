@@ -65,6 +65,10 @@ const UserProfile = () => {
     navigation.navigate("ChangePassword", { request });
   };
 
+  const Authorization = (request) => {
+    navigation.navigate("Authorization", { request });
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (
@@ -167,7 +171,7 @@ const UserProfile = () => {
             {context.stateUser.user.role === "admin" && (<TouchableOpacity onPress={() => Authorization()}>
               <View className="pl-4 flex flex-row space-x-1 items-center">
                 <PhotoIcon size={42} color={COLORS.versatilegray} />
-                <Text className="font-semibold pl-4 ">Student's Authorization</Text>
+                <Text className="font-semibold pl-4 ">Student's Authorization Letter</Text>
               </View>
             </TouchableOpacity>)}
             {context.stateUser.user.role === "student" ||

@@ -12,6 +12,8 @@ import baseURL from "../assets/common/baseUrl";
 import AuthGlobal from "../Context/Store/AuthGlobal";
 import React, { useContext, useState, useEffect } from "react";
 import Login from "../Screens/User/Login";
+import UpdateBalanceStatus from "../Screens/Cashier/UpdateBalanceStatus";
+import BalanceLogs from "../Screens/Cashier/BalanceLogs";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -47,8 +49,7 @@ const CashierNavigator = (props) => {
         headerShown: false,
       }}
     >
-
-     <Stack.Screen
+      <Stack.Screen
         name="Login"
         component={Login}
         options={{
@@ -78,7 +79,7 @@ const CashierNavigator = (props) => {
         options={{
           headerShown: false,
         }}
-        initialParams={{ userProfile: userProfile }} // Pass userProfile as initialParams
+        initialParams={{ userProfile: userProfile }} 
       />
 
       <Stack.Screen
@@ -100,6 +101,22 @@ const CashierNavigator = (props) => {
       <Stack.Screen
         name="Balance"
         component={BalanceForm}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="UpdateBalanceStatus"
+        component={UpdateBalanceStatus}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+       <Stack.Screen
+        name="BalanceLogs"
+        component={BalanceLogs}
         options={{
           headerShown: false,
         }}

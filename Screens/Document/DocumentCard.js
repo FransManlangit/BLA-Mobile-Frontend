@@ -42,8 +42,8 @@ const DocumentCard = (props) => {
           {name.length > 15 ? name.substring(0, 15 - 3) + "..." : name}
         </Text>
 
-        <TouchableOpacity className="flex flex-row space-x-6 pt-4">
-          <Text className="text-s font-semibold p-2">₱{price}</Text>
+        <TouchableOpacity className="flex flex-row space-x-2 pt-4">
+          <Text className="text-s font-semibold p-2">{"₱" + new Intl.NumberFormat("en-US").format(price)}</Text>
           <PlusCircleIcon
             onPress={() => {
               dispatch(actions.addToCartDocument({ ...props, quantity: 1 })),

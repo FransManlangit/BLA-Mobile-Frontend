@@ -21,6 +21,7 @@ import AdminProfile from "../Screens/Admin/AdminProfile";
 import CashierNavigator from "./CashierNavigator";
 import UploadClearance from "../Screens/User/UploadClearance";
 import Authorization from "../Screens/Admin/Authorization";
+import SingleAuthorization from "../Screens/Admin/SingleAuthorization";
 import ChangePassword from "../Screens/User/ChangePassword";
 import Guest from "../Screens/User/Guest";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -117,6 +118,14 @@ const UserNavigator = (props) => {
           <Stack.Screen
             name="RequestDetails"
             component={RequestDetails}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="SingleAuthorization"
+            component={SingleAuthorization}
             options={{
               headerShown: false,
             }}

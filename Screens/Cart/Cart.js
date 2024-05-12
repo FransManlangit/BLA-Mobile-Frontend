@@ -94,7 +94,7 @@ const Cart = (props) => {
             <Text className="tracking-wider text-sm font-semibold subpixel-antialiased">
               {item.name}
             </Text>
-            <Text className="font-normal">₱{item.price}</Text>
+            <Text className="font-normal">{"₱" + new Intl.NumberFormat("en-US").format(item.price)}</Text>
           </View>
         </HStack>
       </Box>
@@ -178,7 +178,7 @@ const Cart = (props) => {
                   Total
                 </Text>
                 <Text className="text-lg font-medium text-black">
-                  ₱ {total.toFixed(2)}
+                {'₱' + new Intl.NumberFormat('en-US').format(total.toFixed(2))}
                 </Text>
               </View>
             </View>
@@ -198,7 +198,7 @@ const Cart = (props) => {
             }}
           >
             <Text className="font-medium text-black tracking-wide">
-              REQUEST {total.toFixed(2)}
+              REQUEST 
             </Text>
           </TouchableOpacity>
         </View>
