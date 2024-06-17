@@ -183,7 +183,7 @@ const Requests = (props) => {
             onValueChange={(value) => setSelectedStatuses(value)}
             style={styles.dropdown}
           >
-            <Select.Item label="Approved" value="Approved" />
+            <Select.Item label="Approved by Registrar" value="Approved by Registrar" />
             <Select.Item label="Declined" value="Declined" />
             <Select.Item label="Received" value="Received" />
             <Select.Item label="Pending" value="Pending" />

@@ -29,9 +29,17 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 // Define status codes
 const codes = [
-  { name: "Approved", code: "Approved" },
+  { name: "Approved by Registrar", code: "Approved by Registrar" },
   { name: "Declined", code: "Declined" },
   { name: "Received", code: "Received" },
+  { name: "Certificate of Good Moral is processing", code: "Certificate of Good Moral is processing" },
+  { name: "Certificate of Honor is processing", code: "Certificate of Honor is processing" },
+  { name: "Certificate of Grades is processing", code: "Certificate of Grades is processing" },
+  { name: "Certificate of Form 137 is processing", code: "Certificate of Form 137 is processing" },
+  { name: "Certificate of Diploma is processing", code: "Certificate of Diploma is processing" },
+  { name: "Certificate of Enrollment is processing", code: "Certificate of Enrollment is processing" },
+  { name: "Certificate of Unsettled Balance is processing", code: "Certificate of Unsettled Balance is processing" },
+  { name: "Both of your request is processing", code: "Both of your request is processing" },
 ];
 
 const RequestCard = ({ item }) => {
@@ -67,9 +75,10 @@ const RequestCard = ({ item }) => {
     hideDatePicker();
   };
 
-  const SetRequestSchedule = () => {
-    // Check if the request status is not "Approved"
-    if (item.requestStatus !== "Approved") {
+
+  const SetRequestSchedule = async () => {
+    // Check if the request status is "Approved by Registrar"
+    if (item.requestStatus !== "Approved by Registrar") {
       Toast.show({
         topOffset: 60,
         type: "error",
@@ -85,53 +94,115 @@ const RequestCard = ({ item }) => {
       return;
     }
   
-    // Retrieve token using async storage
-    AsyncStorage.getItem("jwt")
-      .then((res) => {
-        setToken(res);
-      })
-      .catch((error) => console.log(error));
+    try {
+      // Retrieve token using async storage
+      const token = await AsyncStorage.getItem("jwt");
+      if (!token) throw new Error("Token not found");
   
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
   
-    const request = {
-      dateRelease: dateRelease,
-      user: item.user,
-      requestId: item.id,
-    };
-    console.log("Date release", dateRelease);
-    axios
-      .put(`${baseURL}requests/requestSchedule`, request, config)
-      .then((res) => {
-        if (res.status === 200 || res.status === 201) {
-          console.log("Schedule edited successfully");
-          Toast.show({
-            topOffset: 60,
-            type: "success",
-            text1: "Schedule edited Succesfully",
-            text2: "",
-          });
-          setDateRelease(""); // Clear the date
-          setTimeout(() => {
-            console.log("Navigating to Request screen");
-            navigation.navigate("Documents");
-          }, 500);
-        }
-      })
-      .catch((error) => {
-        console.log("Error editing request:", error);
+      const request = {
+        dateRelease: dateRelease,
+        user: item.user,
+        requestId: item.id,
+      };
+      console.log("Date release", dateRelease);
+  
+      const res = await axios.put(`${baseURL}requests/requestSchedule`, request, config);
+      
+      if (res.status === 200 || res.status === 201) {
+        console.log("Schedule edited successfully");
         Toast.show({
           topOffset: 60,
-          type: "error",
-          text1: "Something went wrong",
-          text2: "Please try again",
+          type: "success",
+          text1: "Schedule edited Successfully",
+          text2: "",
         });
+        setDateRelease(""); // Clear the date
+        setTimeout(() => {
+          console.log("Navigating to Request screen");
+          navigation.navigate("Documents");
+        }, 500);
+      }
+    } catch (error) {
+      console.log("Error editing request:", error.response ? error.response.data : error.message);
+      Toast.show({
+        topOffset: 60,
+        type: "error",
+        text1: "Something went wrong",
+        text2: "Please try again",
       });
+    }
   };
+  
+
+  // const SetRequestSchedule = async () => {
+  //   // Check if the request status is "Approved by Cashier"
+  //   if (item.requestStatus !== "Approved by Registrar") {
+  //     Toast.show({
+  //       topOffset: 60,
+  //       type: "error",
+  //       text1: "Cannot Set Schedule",
+  //       text2: `Request status is ${item.requestStatus}`,
+  //     });
+  //     setDateRelease(""); // Clear the date
+  //     return;
+  //   }
+  
+  //   if (dateRelease === "") {
+  //     setError("Please fill in the form correctly");
+  //     return;
+  //   }
+  
+  //   try {
+  //     // Retrieve token using async storage
+  //     const token = await AsyncStorage.getItem("jwt");
+  //     if (!token) throw new Error("Token not found");
+  
+  //     const config = {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     };
+  
+  //     const request = {
+  //       dateRelease: dateRelease,
+  //       user: item.user,
+  //       requestId: item.id,
+  //     };
+  //     console.log("Date release", dateRelease);
+  
+  //     const res = await axios.put(`${baseURL}requests/requestSchedule`, request, config);
+      
+  //     if (res.status === 200 || res.status === 201) {
+  //       console.log("Schedule edited successfully");
+  //       Toast.show({
+  //         topOffset: 60,
+  //         type: "success",
+  //         text1: "Schedule edited Successfully",
+  //         text2: "",
+  //       });
+  //       setDateRelease(""); // Clear the date
+  //       setTimeout(() => {
+  //         console.log("Navigating to Request screen");
+  //         navigation.navigate("Documents");
+  //       }, 500);
+  //     }
+  //   } catch (error) {
+  //     console.log("Error editing request:", error.response ? error.response.data : error.message);
+  //     Toast.show({
+  //       topOffset: 60,
+  //       type: "error",
+  //       text1: "Something went wrong",
+  //       text2: "Please try again",
+  //     });
+  //   }
+  // };
+  
   
   
 
@@ -195,16 +266,50 @@ const RequestCard = ({ item }) => {
     console.log(request, "HOTDOG");
   };
 
+
+
   useEffect(() => {
     // Set request status and card color based on item status
     if (item.requestStatus === "Approved by Cashier") {
-      setRequestStatus(<TrafficLight Approved />);
+      setRequestStatus(<TrafficLight Approved by Cashier />);
       setStatusText("Approved by Cashier");
       setCardColor("#BABF5E");
-    } else if (item.requestStatus === "Approved") {
-      setRequestStatus(<TrafficLight Approved/>);
-      setStatusText("Approved");
+    } else if (item.requestStatus === "Approved by Registrar") {
+      setRequestStatus(<TrafficLight Approved by Registrar/>);
+      setStatusText("Approved by Registrar");
       setCardColor("#BABF5E");
+    } else if (item.requestStatus === "Certificate of Good Moral is processing") {
+      setRequestStatus(<TrafficLight Certificate of Good Moral is processing/>);
+      setStatusText("Certificate of Good Moral is processing");
+      setCardColor("#c6131b")
+    } else if (item.requestStatus === "Certificate of Honor is processing") {
+      setRequestStatus(<TrafficLight Certificate of Honor is processing/>);
+      setStatusText("Certificate of Honor is processing");
+      setCardColor("#c6131b")
+    } else if (item.requestStatus === "Certificate of Grades is processing") {
+      setRequestStatus(<TrafficLight Certificate of Grades is processing/>);
+      setStatusText("Certificate of Grades is processing");
+      setCardColor("#c6131b")
+    } else if (item.requestStatus === "Certificate of Form 137 is processing") {
+      setRequestStatus(<TrafficLight Certificate is processing/>);
+      setStatusText("The Certificate of Form 137 is processing");
+      setCardColor("#c6131b")
+    } else if (item.requestStatus === "Certificate of Diploma is processing") {
+      setRequestStatus(<TrafficLight Certificate of Diploma is processing/>);
+      setStatusText("Certificate of Diploma is processing");
+      setCardColor("#c6131b")
+    } else if (item.requestStatus === "Certificate of Enrollment is processing") {
+      setRequestStatus(<TrafficLight Certificate of Enrollment is processing/>);
+      setStatusText("Certificate of Enrollment is processing");
+      setCardColor("#c6131b")
+    } else if (item.requestStatus === "Certificate of Unsettled Balance is processing") {
+      setRequestStatus(<TrafficLight Certificate of Unsettled Balance is processing/>);
+      setStatusText("Certificate of Unsettled Balance is processing");
+      setCardColor("#c6131b")
+    } else if (item.requestStatus === "Both of your request is processing") {
+      setRequestStatus(<TrafficLight Both of your request is processing/>);
+      setStatusText("Both of your request is processing");
+      setCardColor("#c6131b")
     } else if (item.requestStatus === "Approved by Guidance") {
       setRequestStatus(<TrafficLight Approved by Guidance/>);
       setStatusText("Approved by Guidance");
@@ -294,8 +399,8 @@ const RequestCard = ({ item }) => {
             </Text>
           </View>
           <View className="flex flex-row">
-            <Text className="text-base">Date of Order:</Text>
-            <Text className="text-zinc-700 text-right w-8/12 text-base">
+            <Text className="text-base">Date of Request:</Text>
+            <Text className="text-zinc-700 text-right w-7/12 text-base">
               {item.dateofRequest.split("T")[0]}
             </Text>
           </View>
