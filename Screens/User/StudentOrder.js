@@ -19,16 +19,13 @@ const StudentOrder = () => {
   const context = useContext(AuthGlobal);
   const [userProfile, setUserProfile] = useState("");
   const [orders, setOrders] = useState([]);
-  const [schedules, setSchedules] = useState([]);
-  console.log(orders, "Student Order List");
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  // Function to handle order press
   const handleOrderPress = (order) => {
     navigation.navigate("Order Details", { order });
   };
-  // Fetch user profile and orders on component focus
+
   useFocusEffect(
     useCallback(() => {
       if (
@@ -54,41 +51,26 @@ const StudentOrder = () => {
         .then((res) => setOrders(res.data))
         .catch((error) => console.log(error));
 
+      axios
+        .get(`${baseURL}orders/userSchedule/${context.stateUser.user.userId}`)
+        .then((res) => setOrders(res.data))
+        .catch((error) => console.log(error));
+
       return () => {
         setUserProfile("");
         setOrders([]);
-        setSchedules([]);
       };
     }, [context.stateUser.isAuthenticated])
   );
-
-  // Fetch schedules for each order if orderId exists
-  useEffect(() => {
-    if (orders.length > 0) {
-      orders.forEach((order) => {
-        axios
-          .get(`${baseURL}schedules/userOrderSchedule/${order._id}`)
-          .then((res) => {
-            if (res.data.dateTime) {
-              setSchedules((prevSchedules) => [
-                ...prevSchedules,
-                { orderId: order._id, dateTime: res.data.dateTime },
-              ]);
-            }
-          })
-          .catch((error) => console.log(error));
-      });
-    }
-  }, [orders]);
 
   const currentDate = new Date();
 
   return (
     <SafeAreaView>
       <KeyboardAwareScrollView>
-        <View className="flex ">
+        <View className="flex">
           <View className="flex-row justify-start pt-4">
-            <View className="rounded-lg bg-[#B1A079] rounded-bl-3xl rounded-br-3xl  w-screen">
+            <View className="rounded-lg bg-[#B1A079] rounded-bl-3xl rounded-br-3xl w-screen">
               <View className="flex-row justify-start pt-4">
                 <TouchableOpacity
                   onPress={() => navigation.goBack()}
@@ -132,8 +114,7 @@ const StudentOrder = () => {
                 <View className="flex pt-2 p-2 flex-row space-x-6 items-center">
                   <Text className="text-xl w-24">Order</Text>
                   <Text className="text-xl w-24">Status</Text>
-                  <Text className="text-xl w-32">Date for Claming</Text>
-      
+                  <Text className="text-xl w-32">Date for Claiming</Text>
                 </View>
               </KeyboardAwareScrollView>
               <KeyboardAwareScrollView
@@ -150,21 +131,17 @@ const StudentOrder = () => {
                       >
                         <View className="flex-row space-x-2">
                           <Text className="text-lg w-20 text-center">
-                            {" "}
                             {index + 1}
                           </Text>
                           <Text className="text-lg w-28 pl-6">
                             {order.orderStatus}
                           </Text>
-                          {schedules && schedules.length > 0 && (
-                            <Text className="text-base text-center pl-8">
-                              {schedules.find((schedule) => schedule.orderId === order._id)
-                                ? format(new Date(schedules.find((schedule) => schedule.orderId === order._id).dateTime), "MMMM dd, yyyy")
-                                : "No Date"}
-                            </Text>
-                          )}
+                          <Text className="text-lg w-40 pl-6">
+                            {order.dateRelease
+                              ? format(new Date(order.dateRelease), "MMMM dd, yyyy")
+                              : "No date schedule"}
+                          </Text>
                         </View>
-
                         <Spacer />
                       </TouchableOpacity>
                     ))

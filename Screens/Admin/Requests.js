@@ -138,37 +138,37 @@ const Requests = (props) => {
             </TouchableOpacity>
             <TouchableOpacity
               className="rounded-l-full bg-[#B1A079] w-24 h-10 p-2"
-              onPress={() => filterGrade("7 Philippians")}
+              onPress={() => filterGrade("7-Philippians")}
             >
               <Text className="font-semibold text-white">7-Philippians</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="rounded-l-full bg-[#B1A079] w-24 h-10 p-2"
-              onPress={() => filterGrade("8 Colossians")}
+              onPress={() => filterGrade("8-Colossians")}
             >
               <Text className="font-semibold text-white">8-Colossians</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="rounded-l-full bg-[#B1A079] w-28 h-10 p-2"
-              onPress={() => filterGrade("9 Thessalonians")}
+              onPress={() => filterGrade("9-Thessalonians")}
             >
               <Text className="font-semibold text-white">9-Thessalonians</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="rounded-l-full bg-[#B1A079] w-18 h-10 p-2"
-              onPress={() => filterGrade("10 Titus")}
+              onPress={() => filterGrade("10-Titus")}
             >
               <Text className="font-semibold text-white">10-Titus</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="rounded-l-full bg-[#B1A079] w-24 h-10 p-2"
-              onPress={() => filterGrade("11 Hebrew")}
+              onPress={() => filterGrade("11-Hebrew")}
             >
               <Text className="font-semibold text-white">11-Hebrew</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="rounded-l-full bg-[#B1A079] w-28 h-10 p-2"
-              onPress={() => filterGrade("12 Revelation")}
+              onPress={() => filterGrade("12-Revelation")}
             >
               <Text className="font-semibold text-white">12-Revelation</Text>
             </TouchableOpacity>
